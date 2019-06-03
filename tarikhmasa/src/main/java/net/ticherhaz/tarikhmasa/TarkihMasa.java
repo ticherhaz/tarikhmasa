@@ -12,6 +12,8 @@ import java.util.concurrent.TimeUnit;
 public class TarkihMasa {
 
     /*
+
+
     Note:
     1. Instant is new way to store date which is from latest Java.
     2. We are using the threetenabp to make it work because it supports lower Android version.
@@ -19,6 +21,28 @@ public class TarkihMasa {
 
     4. If you want to display back by using method convertInstant2LocalTime().
     5. You can change how to display by change the 'ofPattern' at variable DateTimeFormatter formatter.
+
+
+
+
+    ThreeTen Android Backport
+    Copyright (C) 2015 Jake Wharton
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+
+
+
      */
 
     /* Date UTC Static */
@@ -38,14 +62,14 @@ public class TarkihMasa {
     }
 
     /* Date UTC Static Method */
-    public static String convertInstant2LocalTime(String instant) {
+    public static String convertInstant2LocalTime(String tarikhMasa) {
         //We get the value from the database (date) which is from Instant
-        return Instant.parse(instant)
+        return Instant.parse(tarikhMasa)
                 .atZone(ZoneId.systemDefault())
                 .format(formatter);
     }
 
-    public static String getInstantNow() {
+    public static String getTarikhMasa() {
         Instant instant = Instant.now();
         return instant.toString();
     }
@@ -56,15 +80,14 @@ public class TarkihMasa {
     I already implement the latest which is including the Instant.
     Convert from String to Instant and then parse to Date.
      */
-    public static String convertTimeToAgo(String instant) {
+    public static String convertTimeToAgo(final String tarikhMasa, final String language) {
         //Initialize
         String conversionTime = null;
-        String suffix = "Yang Lalu";
         Date pastTime;
 
         //Parse from String (which is stored as Instant.now().toString()
         //And then convert to become Date
-        pastTime = DateTimeUtils.toDate(Instant.parse(instant));
+        pastTime = DateTimeUtils.toDate(Instant.parse(tarikhMasa));
 
         //Today date
         Date nowTime = new Date();
@@ -75,22 +98,58 @@ public class TarkihMasa {
         long hour = TimeUnit.MILLISECONDS.toHours(dateDiff);
         long day = TimeUnit.MILLISECONDS.toDays(dateDiff);
 
+        switch (language) {
+            case "English":
+                conversionTime =  conversionToString(null, "Ago", second, minute, hour, day,
+                        " Second " , " Minute "," Hour " , " Day " , " Week ", " Month " , " Year ");
+                break;
+            case "Malay":
+                conversionTime =  conversionToString(null, "Yang Lalu", second, minute, hour, day,
+                        " Saat " , " Minit "," Jam " , " Hari " , " Minggu ", " Bulan " , " Tahun ");
+            break;
+            default:
+                break;
+        }
+
+//        if (second < 60) {
+//            conversionTime = second + " Saat " + suffix;
+//        } else if (minute < 60) {
+//            conversionTime = minute + " Minit " + suffix;
+//        } else if (hour < 24) {
+//            conversionTime = hour + " Jam " + suffix;
+//        } else if (day >= 7) {
+//            if (day > 30) {
+//                conversionTime = (day / 30) + " Bulan " + suffix;
+//            } else if (day > 360) {
+//                conversionTime = (day / 360) + " Tahun " + suffix;
+//            } else {
+//                conversionTime = (day / 7) + " Minggu " + suffix;
+//            }
+//        } else if (day < 7) {
+//            conversionTime = day + " Hari " + suffix;
+//        }
+      return conversionTime;
+    }
+
+    private static String conversionToString(String conversionTime, final String suffix,
+                                             final long second, final long minute, final long hour, final long day,
+                                             final String sSecond, final  String sMinute, final String sHour, final  String sDay, final String sWeek, final String sMonth, final String sYear) {
         if (second < 60) {
-            conversionTime = second + " Saat " + suffix;
+            conversionTime = second + sSecond + suffix;
         } else if (minute < 60) {
-            conversionTime = minute + " Minit " + suffix;
+            conversionTime = minute + sMinute + suffix;
         } else if (hour < 24) {
-            conversionTime = hour + " Jam " + suffix;
+            conversionTime = hour +sHour + suffix;
         } else if (day >= 7) {
             if (day > 30) {
-                conversionTime = (day / 30) + " Bulan " + suffix;
+                conversionTime = (day / 30) + sMonth + suffix;
             } else if (day > 360) {
-                conversionTime = (day / 360) + " Tahun " + suffix;
+                conversionTime = (day / 360) +sYear + suffix;
             } else {
-                conversionTime = (day / 7) + " Minggu " + suffix;
+                conversionTime = (day / 7) + sWeek + suffix;
             }
         } else if (day < 7) {
-            conversionTime = day + " Hari " + suffix;
+            conversionTime = day + sDay+ suffix;
         }
         return conversionTime;
     }
