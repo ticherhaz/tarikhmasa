@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-public class TarkihMasa {
+public class TarikhMasa {
 
     /*
 
@@ -27,6 +27,7 @@ public class TarkihMasa {
 
 
     ThreeTen Android Backport
+    https://github.com/JakeWharton/ThreeTenABP
     Copyright (C) 2015 Jake Wharton
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -60,7 +61,7 @@ public class TarkihMasa {
             .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)   //Using the system type
             .withLocale(Locale.US);
 
-    public TarkihMasa() {
+    public TarikhMasa() {
     }
 
     /* Date UTC Static Method */
@@ -110,11 +111,13 @@ public class TarkihMasa {
         switch (language) {
             case "English":
                 conversionTime = conversionToString(null, "Ago", second, minute, hour, day,
-                        " Second ", " Minute ", " Hour ", " Day ", " Week ", " Month ", " Year ");
+                        " Second ", " Minute ", " Hour ", " Day ", " Week ", " Month ", " Year ",
+                        "Today, ", "Yesterday, ");
                 break;
             case "Malay":
                 conversionTime = conversionToString(null, "Yang Lalu", second, minute, hour, day,
-                        " Saat ", " Minit ", " Jam ", " Hari ", " Minggu ", " Bulan ", " Tahun ");
+                        " Saat ", " Minit ", " Jam ", " Hari ", " Minggu ", " Bulan ", " Tahun ",
+                        "Hari ini, ", "Semalam, ");
                 break;
             default:
                 break;
@@ -124,13 +127,19 @@ public class TarkihMasa {
 
     private static String conversionToString(String conversionTime, final String suffix,
                                              final long second, final long minute, final long hour, final long day,
-                                             final String sSecond, final String sMinute, final String sHour, final String sDay, final String sWeek, final String sMonth, final String sYear) {
+                                             final String sSecond, final String sMinute, final String sHour, final String sDay, final String sWeek, final String sMonth, final String sYear,
+                                             final String sToday, final String sYesterday) {
         if (second < 60) {
             conversionTime = second + sSecond + suffix;
         } else if (minute < 60) {
             conversionTime = minute + sMinute + suffix;
         } else if (hour < 24) {
-            conversionTime = hour + sHour + suffix;
+            if (hour > 3) {
+                conversionTime = sToday + hour + sHour + suffix;
+            } else {
+                conversionTime = hour + sHour + suffix;
+            }
+
         } else if (day >= 7) {
             if (day > 30) {
                 conversionTime = (day / 30) + sMonth + suffix;
@@ -140,7 +149,12 @@ public class TarkihMasa {
                 conversionTime = (day / 7) + sWeek + suffix;
             }
         } else if (day < 7) {
-            conversionTime = day + sDay + suffix;
+            if (day == 1) {
+                conversionTime = sYesterday + day + sDay + suffix;
+            } else {
+                conversionTime = day + sDay + suffix;
+            }
+
         }
         return conversionTime;
     }
