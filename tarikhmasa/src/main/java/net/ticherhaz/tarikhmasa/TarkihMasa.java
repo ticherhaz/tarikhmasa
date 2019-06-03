@@ -4,6 +4,7 @@ import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
+import org.threeten.bp.format.FormatStyle;
 
 import java.util.Date;
 import java.util.Locale;
@@ -51,11 +52,12 @@ public class TarkihMasa {
             /* You can change as ofPatter or ofLocalizedDateTime
 
             Example:
-            .ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+            .ofPattern("yyyy-MM-dd'T'HH:mm:ss")  //or
+            .ofPattern("HH:mm:ssa dd/MM/yyyy")   //or
             .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)
 
              */
-            .ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+            .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)   //Using the system type
             .withLocale(Locale.US);
 
     public TarkihMasa() {
@@ -67,6 +69,13 @@ public class TarkihMasa {
         return Instant.parse(tarikhMasa)
                 .atZone(ZoneId.systemDefault())
                 .format(formatter);
+    }
+
+    public static String convertInstant2LocalTimePattern(String tarikhMasa, String pattern) {
+        //We get the value from the database (date) which is from Instant
+        return Instant.parse(tarikhMasa)
+                .atZone(ZoneId.systemDefault())
+                .format(DateTimeFormatter.ofPattern(pattern).withLocale(Locale.US));
     }
 
     public static String getTarikhMasa() {
@@ -100,56 +109,38 @@ public class TarkihMasa {
 
         switch (language) {
             case "English":
-                conversionTime =  conversionToString(null, "Ago", second, minute, hour, day,
-                        " Second " , " Minute "," Hour " , " Day " , " Week ", " Month " , " Year ");
+                conversionTime = conversionToString(null, "Ago", second, minute, hour, day,
+                        " Second ", " Minute ", " Hour ", " Day ", " Week ", " Month ", " Year ");
                 break;
             case "Malay":
-                conversionTime =  conversionToString(null, "Yang Lalu", second, minute, hour, day,
-                        " Saat " , " Minit "," Jam " , " Hari " , " Minggu ", " Bulan " , " Tahun ");
-            break;
+                conversionTime = conversionToString(null, "Yang Lalu", second, minute, hour, day,
+                        " Saat ", " Minit ", " Jam ", " Hari ", " Minggu ", " Bulan ", " Tahun ");
+                break;
             default:
                 break;
         }
-
-//        if (second < 60) {
-//            conversionTime = second + " Saat " + suffix;
-//        } else if (minute < 60) {
-//            conversionTime = minute + " Minit " + suffix;
-//        } else if (hour < 24) {
-//            conversionTime = hour + " Jam " + suffix;
-//        } else if (day >= 7) {
-//            if (day > 30) {
-//                conversionTime = (day / 30) + " Bulan " + suffix;
-//            } else if (day > 360) {
-//                conversionTime = (day / 360) + " Tahun " + suffix;
-//            } else {
-//                conversionTime = (day / 7) + " Minggu " + suffix;
-//            }
-//        } else if (day < 7) {
-//            conversionTime = day + " Hari " + suffix;
-//        }
-      return conversionTime;
+        return conversionTime;
     }
 
     private static String conversionToString(String conversionTime, final String suffix,
                                              final long second, final long minute, final long hour, final long day,
-                                             final String sSecond, final  String sMinute, final String sHour, final  String sDay, final String sWeek, final String sMonth, final String sYear) {
+                                             final String sSecond, final String sMinute, final String sHour, final String sDay, final String sWeek, final String sMonth, final String sYear) {
         if (second < 60) {
             conversionTime = second + sSecond + suffix;
         } else if (minute < 60) {
             conversionTime = minute + sMinute + suffix;
         } else if (hour < 24) {
-            conversionTime = hour +sHour + suffix;
+            conversionTime = hour + sHour + suffix;
         } else if (day >= 7) {
             if (day > 30) {
                 conversionTime = (day / 30) + sMonth + suffix;
             } else if (day > 360) {
-                conversionTime = (day / 360) +sYear + suffix;
+                conversionTime = (day / 360) + sYear + suffix;
             } else {
                 conversionTime = (day / 7) + sWeek + suffix;
             }
         } else if (day < 7) {
-            conversionTime = day + sDay+ suffix;
+            conversionTime = day + sDay + suffix;
         }
         return conversionTime;
     }
