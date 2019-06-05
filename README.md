@@ -1,4 +1,4 @@
-# TarikhMasa
+TarikhMasa
 
 HOW TO USE
 
