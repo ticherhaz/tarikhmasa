@@ -27,19 +27,18 @@ Step 3: Create new class "MyApplication.java"
 	
 	public class MyApplication extends Application {
     
-    		@Override
-    		public void onCreate() {
+    	@Override
+    	public void onCreate() {
         	super.onCreate();
-       		AndroidThreeTenBP(this);
-	    	}
+       	AndroidThreeTenBP(this);
+		}
 	}
 
 Step 4: Add android:name in AndroidManifest.xml
 
 	<application
-        android:name=".MyApplication"
 	...
-	>
+	android:name=".MyApplication">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +46,7 @@ Step 4: Add android:name in AndroidManifest.xml
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    	</application>
+    </application>
 
 # List Methods
 
