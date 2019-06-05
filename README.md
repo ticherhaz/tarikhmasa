@@ -1,6 +1,28 @@
-TarikhMasa
+<h1>TarikhMasa</h1>
 
-HOW TO USE
+# HOW TO:
+
+Step 1. Add the JitPack repository to your build file
+
+gradle
+Add it in your root build.gradle at the end of repositories:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+Step 2. Add the dependency
+
+	dependencies {
+		implementation 'com.github.ticherhaz:tarikhmasa:1.5'
+	}
+
+Step 3: Create new class extends Application
+
+
 
 
     TarikhMasa
