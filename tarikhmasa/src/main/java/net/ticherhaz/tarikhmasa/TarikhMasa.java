@@ -154,7 +154,7 @@ public class TarikhMasa {
      * @return current Date Time and Timezone
      * @since 4/6/2019 3:00AM GMT+8
      **/
-    public static String getTarikhMasa() {
+    public static String GetTarikhMasa() {
         Instant instant = Instant.now();
         return instant.toString();
     }
@@ -173,7 +173,7 @@ public class TarikhMasa {
      * @return conversion of time ago
      * @since 5/6/2019 10:01PM GMT+8
      */
-    public static String get(final String tarikhMasa, final String language, final boolean isJustNow) {
+    public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow) {
 
         //Get Instant for tarikhMasa (before) and right now.
         Instant instantNow = Instant.now();
