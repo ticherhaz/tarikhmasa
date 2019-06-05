@@ -1,6 +1,6 @@
 package net.ticherhaz.tarikhmasa;
 
-import android.content.Context;
+import android.app.Application;
 import android.text.format.DateUtils;
 
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -19,18 +19,25 @@ import java.util.concurrent.TimeUnit;
 public class TarikhMasa {
 
     /*
+    TarikhMasa
+    https://github.com/ticherhaz/tarikhmasa
+    Copyright (C) 2015 Ticherhaz
 
+    Introduction: First of all, thanks to Jake Wharton (https://github.com/JakeWharton/ThreeTenABP) for the ThreeTenABP
+    and thanks to Basil Bourque (https://github.com/basil-bourque) for the clean code.
 
     Note:
     1. Instant is new way to store date which is from latest Java.
     2. We are using the threetenabp to make it work because it supports lower Android version.
     3. Instant is store as UTC format. for example: "2019-05-13T14:13:02.291Z"
 
-    4. If you want to display back by using method convertInstant2LocalTime().
+    4. If you want to display back by using method ConvertTarikhMasa2LocalTime().
     5. You can change how to display by change the 'ofPattern' at variable DateTimeFormatter formatter.
 
+    HOW TO USE? go here: https://github.com/ticherhaz/tarikhmasa
+    Refer to README.md
 
-
+    ************************************************************************
 
     ThreeTen Android Backport
     https://github.com/JakeWharton/ThreeTenABP
@@ -48,41 +55,91 @@ public class TarikhMasa {
     See the License for the specific language governing permissions and
     limitations under the License.
 
+    ************************************************************************
 
+    TarikhMasa
+    https://github.com/ticherhaz/tarikhmasa
+    Copyright (C) 2015 Ticherhaz
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
 
      */
 
-    /* Date UTC Static */
-    //TODO: so we can change how to display the date by using ofPattern, just change this one.
+    /**
+     * Explanation:
+     * We use DateTimeFormatter instead SimpleDateFormat because it is
+     * the latest Java and better to use.
+     * We set the pattern as localized and with localeUS
+     *
+     * @since 4/6/2019 3:51AM GMT+8
+     */
     private static DateTimeFormatter formatter = DateTimeFormatter
+
             /* You can change as ofPatter or ofLocalizedDateTime
 
             Example:
             .ofPattern("yyyy-MM-dd'T'HH:mm:ss")  //or
             .ofPattern("HH:mm:ssa dd/MM/yyyy")   //or
-            .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)
+            .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT) //System type
 
              */
-            .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)   //Using the system type
+
+            .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)
             .withLocale(Locale.US);
 
-    public TarikhMasa() {
+    /**
+     * ##              IMPORTANT                ##
+     * <p>
+     * >>>>>>>This method need to be done first!<<<<<<<<<<<<
+     * <p>
+     * Explanation:
+     * To use the Instant.now(), we need to use the AndroidThreeTenABP,
+     * I will call the method from there inside here and then can access to the Application
+     * <p>
+     * How to use:
+     * 1. Make a new class named "MyApplication.java"
+     * 2. Generate class "onCreate"...
+     * 3. Call this method after the super().
+     *
+     * @param application will be send to the original library of AndroidThreeTenABP
+     * @since 6/6/2019 10:31PM GMT+8
+     */
+    public static void AndroidThreeTenBP(Application application) {
+        AndroidThreeTen.init(application);
     }
 
-    public static void AndroidThreeTenBPCustom(Context context) {
-        AndroidThreeTen.init(context);
-    }
-
-    /* Date UTC Static Method */
-    public static String convertInstant2LocalTime(String tarikhMasa) {
+    /**
+     * Explanation:
+     * We get the value of tarikhMasa which is UTC from the database or anything which is before the date now
+     * and then we convert it to local time according where we live for example here is GMT+8
+     *
+     * @param tarikhMasa is the date, time and timezone as String
+     * @return localized date and time not customized
+     */
+    public static String ConvertTarikhMasa2LocalTime(String tarikhMasa) {
         //We get the value from the database (date) which is from Instant
         return Instant.parse(tarikhMasa)
                 .atZone(ZoneId.systemDefault())
                 .format(formatter);
     }
 
-    public static String convertInstant2LocalTimePattern(String tarikhMasa, String pattern) {
+    /**
+     * @param tarikhMasa is the date, time and timezone as String
+     * @param pattern    is for formatter syntax for date time
+     * @return localized date and time that has been customized
+     */
+    public static String ConvertTarikhMasa2LocalTimePattern(String tarikhMasa, String pattern) {
         //We get the value from the database (date) which is from Instant
         return Instant.parse(tarikhMasa)
                 .atZone(ZoneId.systemDefault())
@@ -104,230 +161,35 @@ public class TarikhMasa {
 
     /**
      * Explanation:
-     * This code get the current date time and timezone in ISO 8601
-     * and stored as String.
+     * This is where we want to convert to become 2 minutes ago.
+     * The code is prepared with 3 parameters.
+     * <p>
+     * 1. language: comes with "EN" stands for English and "MY" stands for Malay
+     * 2. isJustNow: depends on us if we want to use it or stick with 0 second ago
      *
-     * @return current Date Time and Timezone
-     * @since 4/6/2019 3.33PM GMT+8
-     **/
-    public static String convertTime2AgoDateUtils(long pastTimeMillis) {
-        CharSequence relativeDate =
-                DateUtils.getRelativeTimeSpanString(pastTimeMillis,
-                        System.currentTimeMillis(),
-                        DateUtils.DAY_IN_MILLIS,
-                        DateUtils.FORMAT_NUMERIC_DATE);
-        return String.valueOf(relativeDate);
-    }
-
-
-    private static String conversionToString(final String language, final long pastTime, final String tarikhMasa, final String tarikhMasaSekarang, String conversionTime, final String suffix,
-                                             final long second, final long minute, final long hour, final long day,
-                                             final String sSecond, final String sJustNow, final boolean isJustNow, final String sMinute, final String sHour, final String sDay, final String sWeek, final String sMonth, final String sYear,
-                                             final String sToday, final String sYesterday) {
-
-
-        /*
-         * Explanation:
-         * get the String of the today, yesterday, 2 days ago and so on
-         *
-         * @since 5/6/2019 12:40PM GMT+8
-         */
-        //Making Day display
-        CharSequence relativeToday = DateUtils.getRelativeTimeSpanString
-                (
-                        pastTime,
-                        System.currentTimeMillis(),
-                        DateUtils.DAY_IN_MILLIS
-                );
-        /*
-         ***************** END ****************
-         */
-
-
-        /*
-         * Explanation:
-         * Convert the relativeToday to another language.
-         * (usage of DateUtils.getRelativeTimeSpanString)
-         *
-         * @since 5/6/2019 12:38PM GMT+8
-         */
-        if (language.equals("MY")) {
-            if (relativeToday.equals("Today")) {
-                relativeToday = "Hari ini, ";
-            } else if (relativeToday.equals("Yesterday")) {
-                relativeToday = "Semalam, ";
-            } else {
-                relativeToday = "";
-            }
-        }
-        if (language.equals("EN")) {
-            if (relativeToday.equals("Today")) {
-                relativeToday = "Today, ";
-            } else if (relativeToday.equals("Yesterday")) {
-                relativeToday = "Yesterday, ";
-            } else {
-                relativeToday = "";
-            }
-        }
-        /*
-         ***************** END ****************
-         */
-
-
-        /*
-         * Explanation:
-         * This is conversion time for SECOND
-         * It will check whether true of false if developer want to use just now instead using second ago
-         * After that, check the language
-         * @since 5/6/2019 1:05PM GMT+8
-         */
-        if (second < 60) {
-            if (isJustNow) {
-                //Output: Just Now
-                conversionTime = sJustNow + ", ";
-            }
-
-            if (!isJustNow) {
-                if (second == 0 || second == 1) {
-                    //Output: 0 Second Ago or 1 Second Ago
-                    conversionTime = second + " " + sSecond + " " + suffix + ", ";
-                } else {
-                    //Output: 2 Seconds Ago ++
-                    if (sSecond.equals(" second")) {
-                        conversionTime = second + " seconds " + suffix + ", ";
-                    }
-                    if (sSecond.equals(" saat")) {
-                        conversionTime = second + sSecond + " " + suffix + ", ";
-                    }
-
-                }
-            }
-        }
-        /*
-         *
-         *
-         *
-         *
-         */
-        else if (minute < 60) {
-            if (language.equals("EN")) {
-                if (minute == 1)
-                    conversionTime = minute + " " + sMinute + " " + suffix + ", ";
-                else
-                    conversionTime = minute + " minutes " + suffix + ", ";
-            } else if (language.equals("MY"))
-                conversionTime = minute + " " + sMinute + " " + suffix + ", ";
-        }
-        /*
-         *
-         *
-         *
-         *
-         */
-        else if (hour < 24) {
-            conversionTime = hour + " " + sHour + " " + suffix + ", ";
-        }
-        /*
-         *
-         *
-         *
-         *
-         *
-         */
-        else if (day >= 7) {
-
-            if (day > 30) {
-                if ((day / 30) == 1) {
-                    conversionTime = (day / 30) + sMonth + suffix;
-                } else {
-                    if (sWeek.equals(" month")) {
-                        conversionTime = (day / 30) + " months" + suffix;
-                    }
-
-                    if (sWeek.equals(" month")) {
-                        conversionTime = (day / 30) + sMonth + suffix;
-                    }
-                }
-
-            } else {
-
-                conversionTime = (day / 7) + sWeek + suffix;
-            }
-
-
-        } else {
-
-            if (day == 1 || day == 2) {
-                // conversionTime = sYesterday + day + sDay + suffix;
-                conversionTime = "";
-            } else {
-                conversionTime = day + sDay + suffix;
-            }
-
-        }
-        return relativeToday + conversionTime;
-
-    }
-
-    /*
-    This method is to display ago.
-    Example: 3 minutes ago.
-    I already implement the latest which is including the Instant.
-    Convert from String to Instant and then parse to Date.
-     */
-    public static String convertTime2Ago(final String tarikhMasa, final String language, final boolean isJustNow) {
-        //Initialize
-        String conversionTime = null;
-        Date pastTime, nowTime2;
-
-        //Parse from String (which is stored as Instant.now().toString()
-        //And then convert to become Date
-        pastTime = DateTimeUtils.toDate(Instant.parse(tarikhMasa));
-
-        //Convert to get the time
-        final String pastTimePattern = convertInstant2LocalTimePattern(tarikhMasa, " h:mma");
-        final String pastDatePattern = convertInstant2LocalTimePattern(tarikhMasa, " d MMM");
-
-        //or we using like this one
-        nowTime2 = DateTimeUtils.toDate(Instant.parse(getTarikhMasa()));
-
-        long pastTimeMillis = TimeUnit.MILLISECONDS.toMillis(pastTime.getTime());
-
-        long dateDiff = nowTime2.getTime() - pastTime.getTime();
-        long second = TimeUnit.MILLISECONDS.toSeconds(dateDiff);
-        long minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff);
-        long hour = TimeUnit.MILLISECONDS.toHours(dateDiff);
-        long day = TimeUnit.MILLISECONDS.toDays(dateDiff);
-
-        switch (language) {
-            case "EN":
-                conversionTime = conversionToString("EN", pastTimeMillis, tarikhMasa, getTarikhMasa(), "", "ago", second, minute, hour, day,
-                        "second", "just now", isJustNow, "minute", "hour", "day", "week", "month", "year",
-                        "today", "yesterday");
-                break;
-            case "MY":
-                conversionTime = conversionToString("MY", pastTimeMillis, tarikhMasa, getTarikhMasa(), "", "yang lalu", second, minute, hour, day,
-                        "saat", "sebentar tadi", isJustNow, "minit", "jam", "hari", "minggu", "bulan", "tahun",
-                        "hari ini", "semalam");
-                break;
-            default:
-                break;
-        }
-        return conversionTime + pastTimePattern + ", " + pastDatePattern;
-    }
-
-    /**
-     * @param tarikhMasa
-     * @param language
-     * @param isJustNow
+     * @param tarikhMasa is the date, time and timezone as String
+     * @param language   choose the language EN : English or MY : Malay
+     * @param isJustNow  check whether to use the just now as string or 0 second ago
      * @return conversion of time ago
      * @since 5/6/2019 10:01PM GMT+8
      */
-    public static String nMethod(final String tarikhMasa, final String language, final boolean isJustNow) {
+    public static String get(final String tarikhMasa, final String language, final boolean isJustNow) {
+
+        //Get Instant for tarikhMasa (before) and right now.
         Instant instantNow = Instant.now();
         Instant instantBefore = Instant.parse(tarikhMasa);
 
-        //Use Duration
+        /*
+         * Explanation:
+         * We are using Duration to compare the value from 2 different date and time.
+         * Duration is from the ThreeTenABP
+         * It is the latest method that we can use.
+         *
+         * After we changed it, we divided them to second, minute, hour and day.
+         *
+         * @since 5/6/2019 11:21PM GMT+8
+         *
+         */
         Duration duration = Duration.between(instantBefore, instantNow);
 
         //Variable
@@ -339,11 +201,11 @@ public class TarikhMasa {
 
         /*
          * Explanation:
-         * get the String of the today, yesterday, 2 days ago and so on
+         * Making display for the today, yesterday and so on by using DateTimeUtils library.
+         * First, need to convert from Instant to become Date and get the Millis.
          *
          * @since 5/6/2019 12:40PM GMT+8
          */
-        //Making Day display
         Date dateBefore = DateTimeUtils.toDate(Instant.parse(tarikhMasa));
 
         long dateMillis = TimeUnit.MILLISECONDS.toMillis(dateBefore.getTime());
@@ -356,7 +218,6 @@ public class TarikhMasa {
         /*
          ***************** END ****************
          */
-
 
         /*
          * Explanation:
@@ -387,102 +248,75 @@ public class TarikhMasa {
          ***************** END ****************
          */
 
-
-        //Convert to get the time
-        final String beforeTime = convertInstant2LocalTimePattern(tarikhMasa, "h:mma");
-        final String beforeDate = convertInstant2LocalTimePattern(tarikhMasa, "d MMM");
-
+        //Convert tarikhMasa divided to time and date
+        final String beforeTime = ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "h:mma");
+        final String beforeDate = ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "d MMM");
 
         //Checking for second
         if (second < 60) {
-
             //Usage of just now
             if (isJustNow) {
-
-                if (language.equals("EN")) {
+                //Checking for language chose
+                if (language.equals("EN"))
                     conversionTime = "Just now";
-                }
-
-                if (language.equals("MY")) {
+                if (language.equals("MY"))
                     conversionTime = "Sebentar tadi";
-                }
-
             } else {
-
+                //Checking for language chose
                 if (language.equals("EN")) {
-                    if (second == 0 || second == 1) {
+                    if (second == 0 || second == 1)
                         conversionTime = second + " second ago";
-                    } else {
+                    else
                         conversionTime = second + " seconds ago";
-                    }
                 }
-
-                if (language.equals("MY")) {
+                if (language.equals("MY"))
                     conversionTime = second + " saat yang lalu";
-                }
-
-
             }
-
-        } else if (minute < 60) {
-
+        }
+        //Checking for minute
+        else if (minute < 60) {
+            //Checking for language chose
             if (language.equals("EN")) {
-                if (minute == 1) {
+                if (minute == 1)
                     conversionTime = minute + " minute ago";
-                } else {
+                else
                     conversionTime = minute + " minutes ago";
-                }
             }
-
-            if (language.equals("MY")) {
+            if (language.equals("MY"))
                 conversionTime = minute + " minit yang lalu";
-            }
-
-        } else if (hour < 24) {
-
+        }
+        //Checking for hour
+        else if (hour < 24) {
+            //Checking for language chose
             if (language.equals("EN")) {
-
-                if (hour == 1) {
+                if (hour == 1)
                     conversionTime = relativeToday + ", " + hour + " hour ago, " + beforeTime;
-                } else {
+                else
                     conversionTime = relativeToday + ", " + hour + " hours ago, " + beforeTime;
-                }
-
             }
-
-            if (language.equals("MY")) {
+            if (language.equals("MY"))
                 conversionTime = relativeToday + ", " + hour + " jam yang lalu, " + beforeTime;
-            }
-
-        } else if (day < 7) {
-
+        }
+        //Checking for day
+        else if (day < 7) {
+            //Checking for language chose
             if (language.equals("EN")) {
-                if (day == 1) {
-
+                if (day == 1)
                     conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
-
-                } else {
+                else
                     conversionTime = day + " days ago, " + beforeTime + ", " + beforeDate;
-                }
             }
-
             if (language.equals("MY")) {
-
-                if (day == 1) {
+                if (day == 1)
                     conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
-
-                } else {
-
+                else
                     conversionTime = day + " hari yang lalu, " + beforeTime + ", " + beforeDate;
-                }
             }
-
         }
-
-        //After too many days
-        else {
+        //When the day above 7 days, it will display only time and date
+        else
             conversionTime = beforeTime + ", " + beforeDate;
-        }
+
         return conversionTime;
     }
 }
