@@ -1,6 +1,12 @@
 package net.ticherhaz.tarikhmasa;
 
+import android.content.Context;
+import android.text.format.DateUtils;
+
+import com.jakewharton.threetenabp.AndroidThreeTen;
+
 import org.threeten.bp.DateTimeUtils;
+import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
 import org.threeten.bp.ZoneId;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -64,6 +70,10 @@ public class TarikhMasa {
     public TarikhMasa() {
     }
 
+    public static void AndroidThreeTenBPCustom(Context context) {
+        AndroidThreeTen.init(context);
+    }
+
     /* Date UTC Static Method */
     public static String convertInstant2LocalTime(String tarikhMasa) {
         //We get the value from the database (date) which is from Instant
@@ -79,9 +89,184 @@ public class TarikhMasa {
                 .format(DateTimeFormatter.ofPattern(pattern).withLocale(Locale.US));
     }
 
+    /**
+     * Explanation:
+     * This code get the current date time and timezone in ISO 8601
+     * and stored as String.
+     *
+     * @return current Date Time and Timezone
+     * @since 4/6/2019 3:00AM GMT+8
+     **/
     public static String getTarikhMasa() {
         Instant instant = Instant.now();
         return instant.toString();
+    }
+
+    /**
+     * Explanation:
+     * This code get the current date time and timezone in ISO 8601
+     * and stored as String.
+     *
+     * @return current Date Time and Timezone
+     * @since 4/6/2019 3.33PM GMT+8
+     **/
+    public static String convertTime2AgoDateUtils(long pastTimeMillis) {
+        CharSequence relativeDate =
+                DateUtils.getRelativeTimeSpanString(pastTimeMillis,
+                        System.currentTimeMillis(),
+                        DateUtils.DAY_IN_MILLIS,
+                        DateUtils.FORMAT_NUMERIC_DATE);
+        return String.valueOf(relativeDate);
+    }
+
+
+    private static String conversionToString(final String language, final long pastTime, final String tarikhMasa, final String tarikhMasaSekarang, String conversionTime, final String suffix,
+                                             final long second, final long minute, final long hour, final long day,
+                                             final String sSecond, final String sJustNow, final boolean isJustNow, final String sMinute, final String sHour, final String sDay, final String sWeek, final String sMonth, final String sYear,
+                                             final String sToday, final String sYesterday) {
+
+
+        /*
+         * Explanation:
+         * get the String of the today, yesterday, 2 days ago and so on
+         *
+         * @since 5/6/2019 12:40PM GMT+8
+         */
+        //Making Day display
+        CharSequence relativeToday = DateUtils.getRelativeTimeSpanString
+                (
+                        pastTime,
+                        System.currentTimeMillis(),
+                        DateUtils.DAY_IN_MILLIS
+                );
+        /*
+         ***************** END ****************
+         */
+
+
+        /*
+         * Explanation:
+         * Convert the relativeToday to another language.
+         * (usage of DateUtils.getRelativeTimeSpanString)
+         *
+         * @since 5/6/2019 12:38PM GMT+8
+         */
+        if (language.equals("MY")) {
+            if (relativeToday.equals("Today")) {
+                relativeToday = "Hari ini, ";
+            } else if (relativeToday.equals("Yesterday")) {
+                relativeToday = "Semalam, ";
+            } else {
+                relativeToday = "";
+            }
+        }
+        if (language.equals("EN")) {
+            if (relativeToday.equals("Today")) {
+                relativeToday = "Today, ";
+            } else if (relativeToday.equals("Yesterday")) {
+                relativeToday = "Yesterday, ";
+            } else {
+                relativeToday = "";
+            }
+        }
+        /*
+         ***************** END ****************
+         */
+
+
+        /*
+         * Explanation:
+         * This is conversion time for SECOND
+         * It will check whether true of false if developer want to use just now instead using second ago
+         * After that, check the language
+         * @since 5/6/2019 1:05PM GMT+8
+         */
+        if (second < 60) {
+            if (isJustNow) {
+                //Output: Just Now
+                conversionTime = sJustNow + ", ";
+            }
+
+            if (!isJustNow) {
+                if (second == 0 || second == 1) {
+                    //Output: 0 Second Ago or 1 Second Ago
+                    conversionTime = second + " " + sSecond + " " + suffix + ", ";
+                } else {
+                    //Output: 2 Seconds Ago ++
+                    if (sSecond.equals(" second")) {
+                        conversionTime = second + " seconds " + suffix + ", ";
+                    }
+                    if (sSecond.equals(" saat")) {
+                        conversionTime = second + sSecond + " " + suffix + ", ";
+                    }
+
+                }
+            }
+        }
+        /*
+         *
+         *
+         *
+         *
+         */
+        else if (minute < 60) {
+            if (language.equals("EN")) {
+                if (minute == 1)
+                    conversionTime = minute + " " + sMinute + " " + suffix + ", ";
+                else
+                    conversionTime = minute + " minutes " + suffix + ", ";
+            } else if (language.equals("MY"))
+                conversionTime = minute + " " + sMinute + " " + suffix + ", ";
+        }
+        /*
+         *
+         *
+         *
+         *
+         */
+        else if (hour < 24) {
+            conversionTime = hour + " " + sHour + " " + suffix + ", ";
+        }
+        /*
+         *
+         *
+         *
+         *
+         *
+         */
+        else if (day >= 7) {
+
+            if (day > 30) {
+                if ((day / 30) == 1) {
+                    conversionTime = (day / 30) + sMonth + suffix;
+                } else {
+                    if (sWeek.equals(" month")) {
+                        conversionTime = (day / 30) + " months" + suffix;
+                    }
+
+                    if (sWeek.equals(" month")) {
+                        conversionTime = (day / 30) + sMonth + suffix;
+                    }
+                }
+
+            } else {
+
+                conversionTime = (day / 7) + sWeek + suffix;
+            }
+
+
+        } else {
+
+            if (day == 1 || day == 2) {
+                // conversionTime = sYesterday + day + sDay + suffix;
+                conversionTime = "";
+            } else {
+                conversionTime = day + sDay + suffix;
+            }
+
+        }
+        return relativeToday + conversionTime;
+
     }
 
     /*
@@ -90,71 +275,213 @@ public class TarikhMasa {
     I already implement the latest which is including the Instant.
     Convert from String to Instant and then parse to Date.
      */
-    public static String convertTimeToAgo(final String tarikhMasa, final String language) {
+    public static String convertTime2Ago(final String tarikhMasa, final String language, final boolean isJustNow) {
         //Initialize
         String conversionTime = null;
-        Date pastTime;
+        Date pastTime, nowTime2;
 
         //Parse from String (which is stored as Instant.now().toString()
         //And then convert to become Date
         pastTime = DateTimeUtils.toDate(Instant.parse(tarikhMasa));
 
-        //Today date
-        Date nowTime = new Date();
+        //Convert to get the time
+        final String pastTimePattern = convertInstant2LocalTimePattern(tarikhMasa, " h:mma");
+        final String pastDatePattern = convertInstant2LocalTimePattern(tarikhMasa, " d MMM");
 
-        long dateDiff = nowTime.getTime() - pastTime.getTime();
+        //or we using like this one
+        nowTime2 = DateTimeUtils.toDate(Instant.parse(getTarikhMasa()));
+
+        long pastTimeMillis = TimeUnit.MILLISECONDS.toMillis(pastTime.getTime());
+
+        long dateDiff = nowTime2.getTime() - pastTime.getTime();
         long second = TimeUnit.MILLISECONDS.toSeconds(dateDiff);
         long minute = TimeUnit.MILLISECONDS.toMinutes(dateDiff);
         long hour = TimeUnit.MILLISECONDS.toHours(dateDiff);
         long day = TimeUnit.MILLISECONDS.toDays(dateDiff);
 
         switch (language) {
-            case "English":
-                conversionTime = conversionToString(null, "Ago", second, minute, hour, day,
-                        " Second ", " Minute ", " Hour ", " Day ", " Week ", " Month ", " Year ",
-                        "Today, ", "Yesterday, ");
+            case "EN":
+                conversionTime = conversionToString("EN", pastTimeMillis, tarikhMasa, getTarikhMasa(), "", "ago", second, minute, hour, day,
+                        "second", "just now", isJustNow, "minute", "hour", "day", "week", "month", "year",
+                        "today", "yesterday");
                 break;
-            case "Malay":
-                conversionTime = conversionToString(null, "Yang Lalu", second, minute, hour, day,
-                        " Saat ", " Minit ", " Jam ", " Hari ", " Minggu ", " Bulan ", " Tahun ",
-                        "Hari ini, ", "Semalam, ");
+            case "MY":
+                conversionTime = conversionToString("MY", pastTimeMillis, tarikhMasa, getTarikhMasa(), "", "yang lalu", second, minute, hour, day,
+                        "saat", "sebentar tadi", isJustNow, "minit", "jam", "hari", "minggu", "bulan", "tahun",
+                        "hari ini", "semalam");
                 break;
             default:
                 break;
         }
-        return conversionTime;
+        return conversionTime + pastTimePattern + ", " + pastDatePattern;
     }
 
-    private static String conversionToString(String conversionTime, final String suffix,
-                                             final long second, final long minute, final long hour, final long day,
-                                             final String sSecond, final String sMinute, final String sHour, final String sDay, final String sWeek, final String sMonth, final String sYear,
-                                             final String sToday, final String sYesterday) {
+    /**
+     * @param tarikhMasa
+     * @param language
+     * @param isJustNow
+     * @return conversion of time ago
+     * @since 5/6/2019 10:01PM GMT+8
+     */
+    public static String nMethod(final String tarikhMasa, final String language, final boolean isJustNow) {
+        Instant instantNow = Instant.now();
+        Instant instantBefore = Instant.parse(tarikhMasa);
+
+        //Use Duration
+        Duration duration = Duration.between(instantBefore, instantNow);
+
+        //Variable
+        String conversionTime = null;
+        long second = duration.getSeconds();
+        long minute = duration.toMinutes();
+        long hour = duration.toHours();
+        long day = duration.toDays();
+
+        /*
+         * Explanation:
+         * get the String of the today, yesterday, 2 days ago and so on
+         *
+         * @since 5/6/2019 12:40PM GMT+8
+         */
+        //Making Day display
+        Date dateBefore = DateTimeUtils.toDate(Instant.parse(tarikhMasa));
+
+        long dateMillis = TimeUnit.MILLISECONDS.toMillis(dateBefore.getTime());
+        CharSequence relativeToday = DateUtils.getRelativeTimeSpanString
+                (
+                        dateMillis,
+                        System.currentTimeMillis(),
+                        DateUtils.DAY_IN_MILLIS
+                );
+        /*
+         ***************** END ****************
+         */
+
+
+        /*
+         * Explanation:
+         * Convert the relativeToday to another language.
+         * (usage of DateUtils.getRelativeTimeSpanString)
+         *
+         * @since 5/6/2019 12:38PM GMT+8
+         */
+        if (language.equals("MY")) {
+            if (relativeToday.equals("Today")) {
+                relativeToday = "Hari ini";
+            } else if (relativeToday.equals("Yesterday")) {
+                relativeToday = "Semalam";
+            } else {
+                relativeToday = "";
+            }
+        }
+        if (language.equals("EN")) {
+            if (relativeToday.equals("Today")) {
+                relativeToday = "Today";
+            } else if (relativeToday.equals("Yesterday")) {
+                relativeToday = "Yesterday";
+            } else {
+                relativeToday = "";
+            }
+        }
+        /*
+         ***************** END ****************
+         */
+
+
+        //Convert to get the time
+        final String beforeTime = convertInstant2LocalTimePattern(tarikhMasa, "h:mma");
+        final String beforeDate = convertInstant2LocalTimePattern(tarikhMasa, "d MMM");
+
+
+        //Checking for second
         if (second < 60) {
-            conversionTime = second + sSecond + suffix;
+
+            //Usage of just now
+            if (isJustNow) {
+
+                if (language.equals("EN")) {
+                    conversionTime = "Just now";
+                }
+
+                if (language.equals("MY")) {
+                    conversionTime = "Sebentar tadi";
+                }
+
+            } else {
+
+                if (language.equals("EN")) {
+                    if (second == 0 || second == 1) {
+                        conversionTime = second + " second ago";
+                    } else {
+                        conversionTime = second + " seconds ago";
+                    }
+                }
+
+                if (language.equals("MY")) {
+                    conversionTime = second + " saat yang lalu";
+                }
+
+
+            }
+
         } else if (minute < 60) {
-            conversionTime = minute + sMinute + suffix;
+
+            if (language.equals("EN")) {
+                if (minute == 1) {
+                    conversionTime = minute + " minute ago";
+                } else {
+                    conversionTime = minute + " minutes ago";
+                }
+            }
+
+            if (language.equals("MY")) {
+                conversionTime = minute + " minit yang lalu";
+            }
+
         } else if (hour < 24) {
-            if (hour > 3) {
-                conversionTime = sToday + hour + sHour + suffix;
-            } else {
-                conversionTime = hour + sHour + suffix;
+
+            if (language.equals("EN")) {
+
+                if (hour == 1) {
+                    conversionTime = relativeToday + ", " + hour + " hour ago, " + beforeTime;
+                } else {
+                    conversionTime = relativeToday + ", " + hour + " hours ago, " + beforeTime;
+                }
+
             }
 
-        } else if (day >= 7) {
-            if (day > 30) {
-                conversionTime = (day / 30) + sMonth + suffix;
-            } else if (day > 360) {
-                conversionTime = (day / 360) + sYear + suffix;
-            } else {
-                conversionTime = (day / 7) + sWeek + suffix;
+            if (language.equals("MY")) {
+                conversionTime = relativeToday + ", " + hour + " jam yang lalu, " + beforeTime;
             }
+
         } else if (day < 7) {
-            if (day == 1) {
-                conversionTime = sYesterday + day + sDay + suffix;
-            } else {
-                conversionTime = day + sDay + suffix;
+
+            if (language.equals("EN")) {
+                if (day == 1) {
+
+                    conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
+
+                } else {
+                    conversionTime = day + " days ago, " + beforeTime + ", " + beforeDate;
+                }
             }
 
+            if (language.equals("MY")) {
+
+                if (day == 1) {
+                    conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
+
+                } else {
+
+                    conversionTime = day + " hari yang lalu, " + beforeTime + ", " + beforeDate;
+                }
+            }
+
+        }
+
+        //After too many days
+        else {
+            conversionTime = beforeTime + ", " + beforeDate;
         }
         return conversionTime;
     }
