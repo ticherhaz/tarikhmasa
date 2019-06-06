@@ -53,8 +53,8 @@ Step 4: Add android:name in AndroidManifest.xml
 # List Methods
 
 	public static String GetTarikhMasa()
-	public static String ConvertTarikhMasa2LocalTime(String tarikhMasa)
-	public static String ConvertTarikhMasa2LocalTimePattern(String tarikhMasa, String pattern)
+	public static String ConvertTarikhMasa2LocalTime(final String tarikhMasa)
+	public static String ConvertTarikhMasa2LocalTimePattern(final String tarikhMasa, final String pattern)
 	public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow)
 
 # Usage
