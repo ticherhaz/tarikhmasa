@@ -1,6 +1,6 @@
-<h1>TarikhMasa</h1>
+TarikhMasa
 
-# HOW TO:
+# Initial
 
 Step 1. Add the JitPack repository to your build file
 
@@ -20,8 +20,116 @@ Step 2. Add the dependency
 		implementation 'com.github.ticherhaz:tarikhmasa:1.5'
 	}
 
-Step 3: Create new class extends Application
+Step 3: Create new class "MyApplication.java"
 
+	...
+	import static net.ticherhaz.tarikhmasa.TarikhMasa.AndroidThreeTenBP;
+	
+	public class MyApplication extends Application {
+    
+    	@Override
+    	public void onCreate() {
+        	super.onCreate();
+       	AndroidThreeTenBP(this);
+		}
+	}
+
+Step 4: Add android:name in AndroidManifest.xml
+
+	<application
+	...
+	android:name=".MyApplication">
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+# List Methods
+
+	public static String GetTarikhMasa()
+	public static String ConvertTarikhMasa2LocalTime(String tarikhMasa)
+	public static String ConvertTarikhMasa2LocalTimePattern(String tarikhMasa, String pattern)
+	public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow)
+
+# Usage
+
+No 1: Get the current time UTC (tarikhMasa)
+
+	import static net.ticherhaz.tarikhmasa.TarikhMasa.GetTarikhMasa;
+	
+	textViewDate.setText(GetTarikhMasa());
+	
+Output:
+
+	2019-06-05T17:38:44.079Z
+
+No 2: Convert from tarikhMasa to Local time
+
+	import static net.ticherhaz.tarikhmasa.TarikhMasa.ConvertTarikhMasa2LocalTime;
+	
+	textViewDate.setText(ConvertTarikhMasa2LocalTime(GetTarikhMasa()));
+
+Output:
+
+	June 6, 2019 1:41 AM
+
+~another example
+
+	textViewDate.setText(ConvertTarikhMasa2LocalTime("2019-06-02T17:38:44.079Z"));
+	
+Output:
+
+	June 3, 2019 1:38 AM
+
+No 3: Convert from tarikhMasa to Local time by Pattern (Customize yours!)
+
+Note: More pattern, can go here http://tutorials.jenkov.com/java-internationalization/simpledateformat.html
+
+	import static net.ticherhaz.tarikhmasa.TarikhMasa.ConvertTarikhMasa2LocalTimePattern;
+	import static net.ticherhaz.tarikhmasa.TarikhMasa.GetTarikhMasa;
+	
+	textViewDate.setText(ConvertTarikhMasa2LocalTimePattern(GetTarikhMasa(), "dd/MMM/yyyy"));
+	
+Output:
+
+	06/Jun/2019
+
+No 4: Get Time Ago (example, 3 minutes ago)
+
+	import static net.ticherhaz.tarikhmasa.TarikhMasa.GetTarikhMasaTimeAgo;
+	
+	textViewDate.setText(GetTarikhMasaTimeAgo("2019-06-05T17:38:44.079Z", "EN", true));
+
+Output:
+
+	15 minutes ago
+
+~another example
+
+	textViewDate.setText(GetTarikhMasaTimeAgo("2019-06-04T17:38:44.079Z", "MY", true));
+
+Output:
+
+	Semalam, 1:38AM, 5 Jun
+
+
+
+# More Information
+
+Go to the TarikhMasa.class more details about explanation.
+
+How to get to that class?
+1. Hold 'Ctrl'
+2. Click the method : example, GetTarikhMasa()
+3. It will go to the TarikhMasa.class
+
+# Question?
+
+Email me: ticherhaz@gmail.com
 
 
 
