@@ -73,7 +73,7 @@ public class TarikhMasa {
     See the License for the specific language governing permissions and
     limitations under the License.
 
-
+     *Support min: API 15
      */
 
     /**
@@ -100,13 +100,10 @@ public class TarikhMasa {
 
     /**
      * ##              IMPORTANT                ##
-     * <p>
-     * >>>>>>>This method need to be done first!<<<<<<<<<<<<
-     * <p>
+     * This method need to be done first!
      * Explanation:
      * To use the Instant.now(), we need to use the AndroidThreeTenABP,
-     * I will call the method from there inside here and then can access to the Application
-     * <p>
+     * I will call the method from there inside here and then can access to the Application.
      * How to use:
      * 1. Make a new class named "MyApplication.java"
      * 2. Generate class "onCreate"...
@@ -135,6 +132,10 @@ public class TarikhMasa {
     }
 
     /**
+     * Explanation:
+     * We get the value of tarikhMasa UTC which one we stored and convert to the local time with customize pattern.
+     * More detail about pattern can go here: http://tutorials.jenkov.com/java-internationalization/simpledateformat.html
+     *
      * @param tarikhMasa is the date, time and timezone as String
      * @param pattern    is for formatter syntax for date time
      * @return localized date and time that has been customized
@@ -163,7 +164,6 @@ public class TarikhMasa {
      * Explanation:
      * This is where we want to convert to become 2 minutes ago.
      * The code is prepared with 3 parameters.
-     * <p>
      * 1. language: comes with "EN" stands for English and "MY" stands for Malay
      * 2. isJustNow: depends on us if we want to use it or stick with 0 second ago
      *
@@ -192,7 +192,7 @@ public class TarikhMasa {
          */
         Duration duration = Duration.between(instantBefore, instantNow);
 
-        //Variable
+        //Variables
         String conversionTime = null;
         long second = duration.getSeconds();
         long minute = duration.toMinutes();
@@ -216,29 +216,33 @@ public class TarikhMasa {
                         DateUtils.DAY_IN_MILLIS
                 );
         /*
-         ***************** END ****************
+         * ***************** END ****************
          */
 
         /*
          * Explanation:
          * Convert the relativeToday to another language.
-         * (usage of DateUtils.getRelativeTimeSpanString)
+         * (usage of DateUtils.getRelativeTimeSpanString) //This one is old.
+         *
+         * NEW: We are using back the day as we get from the Duration,
+         * and change it to become today and yesterday
          *
          * @since 5/6/2019 12:38PM GMT+8
+         * @modified 6/6/2019 2:26PM GMT+8
          */
         if (language.equals("MY")) {
-            if (relativeToday.equals("Today")) {
+            if (day == 0) {
                 relativeToday = "Hari ini";
-            } else if (relativeToday.equals("Yesterday")) {
+            } else if (day == 1) {
                 relativeToday = "Semalam";
             } else {
                 relativeToday = "";
             }
         }
         if (language.equals("EN")) {
-            if (relativeToday.equals("Today")) {
+            if (day == 0) {
                 relativeToday = "Today";
-            } else if (relativeToday.equals("Yesterday")) {
+            } else if (day == 1) {
                 relativeToday = "Yesterday";
             } else {
                 relativeToday = "";
@@ -247,6 +251,7 @@ public class TarikhMasa {
         /*
          ***************** END ****************
          */
+
 
         //Convert tarikhMasa divided to time and date
         final String beforeTime = ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "h:mma");
