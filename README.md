@@ -2,6 +2,8 @@ TarikhMasa
 
 # Initial
 
+Note: Support API15 and above.
+
 Step 1. Add the JitPack repository to your build file
 
 gradle
