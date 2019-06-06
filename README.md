@@ -19,7 +19,7 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-		implementation 'com.github.ticherhaz:tarikhmasa:1.5'
+		implementation 'com.github.ticherhaz:tarikhmasa:1.5.3'
 	}
 
 Step 3: Create new class "MyApplication.java"
