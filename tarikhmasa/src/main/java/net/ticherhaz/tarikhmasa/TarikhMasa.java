@@ -112,7 +112,7 @@ public class TarikhMasa {
      * @param application will be send to the original library of AndroidThreeTenABP
      * @since 6/6/2019 10:31PM GMT+8
      */
-    public static void AndroidThreeTenBP(Application application) {
+    public static void AndroidThreeTenBP(final Application application) {
         AndroidThreeTen.init(application);
     }
 
@@ -123,8 +123,9 @@ public class TarikhMasa {
      *
      * @param tarikhMasa is the date, time and timezone as String
      * @return localized date and time not customized
+     * @since 6/6/2019 2:37PM GMT+8
      */
-    public static String ConvertTarikhMasa2LocalTime(String tarikhMasa) {
+    public static String ConvertTarikhMasa2LocalTime(final String tarikhMasa) {
         //We get the value from the database (date) which is from Instant
         return Instant.parse(tarikhMasa)
                 .atZone(ZoneId.systemDefault())
@@ -139,8 +140,9 @@ public class TarikhMasa {
      * @param tarikhMasa is the date, time and timezone as String
      * @param pattern    is for formatter syntax for date time
      * @return localized date and time that has been customized
+     * @since 6/6/2019 2:36PM GMT+8
      */
-    public static String ConvertTarikhMasa2LocalTimePattern(String tarikhMasa, String pattern) {
+    public static String ConvertTarikhMasa2LocalTimePattern(final String tarikhMasa, final String pattern) {
         //We get the value from the database (date) which is from Instant
         return Instant.parse(tarikhMasa)
                 .atZone(ZoneId.systemDefault())
