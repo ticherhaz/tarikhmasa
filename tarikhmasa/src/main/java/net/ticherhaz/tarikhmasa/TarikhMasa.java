@@ -168,14 +168,16 @@ public class TarikhMasa {
      * The code is prepared with 3 parameters.
      * 1. language: comes with "EN" stands for English and "MY" stands for Malay
      * 2. isJustNow: depends on us if we want to use it or stick with 0 second ago
+     * 3. NEW (@since 8/6/2019 8:28PM GMT+8) onlyTodayYesterday: if false, then after 2 days, it will only show date and time.
      *
-     * @param tarikhMasa is the date, time and timezone as String
-     * @param language   choose the language EN : English or MY : Malay
-     * @param isJustNow  check whether to use the just now as string or 0 second ago
+     * @param tarikhMasa         is the date, time and timezone as String
+     * @param language           choose the language EN : English or MY : Malay
+     * @param isJustNow          check whether to use the just now as string or 0 second ago
+     * @param onlyTodayYesterday check whether user just want to display only Today and Yesterday or also will display 2 days ago.
      * @return conversion of time ago
      * @since 5/6/2019 10:01PM GMT+8
      */
-    public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow) {
+    public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow, final boolean onlyTodayYesterday) {
 
         //Get Instant for tarikhMasa (before) and right now.
         Instant instantNow = Instant.now();
@@ -308,16 +310,30 @@ public class TarikhMasa {
         else if (day < 7) {
             //Checking for language chose
             if (language.equals("EN")) {
-                if (day == 1)
+                //Checking if the day is 0 (today) or 1 (yesterday), then display it
+                if (day == 0 || day == 1)
                     conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
-                else
-                    conversionTime = day + " days ago, " + beforeTime + ", " + beforeDate;
+                else {
+                    //Checking if onlyTodayYesterday
+                    if (onlyTodayYesterday)
+                        conversionTime = beforeTime + ", " + beforeDate;
+                    else
+                        conversionTime = day + " days ago, " + beforeTime + ", " + beforeDate;
+                }
+
+
             }
             if (language.equals("MY")) {
-                if (day == 1)
+                if (day == 0 || day == 1)
                     conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
-                else
-                    conversionTime = day + " hari yang lalu, " + beforeTime + ", " + beforeDate;
+                else {
+                    //Checking if onlyTodayYesterday
+                    if (onlyTodayYesterday)
+                        conversionTime = beforeTime + ", " + beforeDate;
+                    else
+                        conversionTime = day + " hari yang lalu, " + beforeTime + ", " + beforeDate;
+                }
+
             }
         }
         //When the day above 7 days, it will display only time and date

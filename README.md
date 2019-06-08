@@ -1,9 +1,12 @@
-TarikhMasa
+TarikhMasa 1.5.4
 
-# Initial
+ANDROID STUDIO
 
 Note: Support API15 and above.
 Tutorial Video: https://youtu.be/_Jr89NzGmig
+
+# Initial
+
 
 Step 1. Add the JitPack repository to your build file
 
@@ -20,7 +23,8 @@ Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-		implementation 'com.github.ticherhaz:tarikhmasa:1.5.3'
+	    ...
+		implementation 'com.github.ticherhaz:tarikhmasa:1.5.4'
 	}
 
 Step 3: Create new class "MyApplication.java"
@@ -56,12 +60,13 @@ Step 4: Add android:name in AndroidManifest.xml
 	public static String GetTarikhMasa()
 	public static String ConvertTarikhMasa2LocalTime(final String tarikhMasa)
 	public static String ConvertTarikhMasa2LocalTimePattern(final String tarikhMasa, final String pattern)
-	public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow)
+	public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow, final boolean onlyTodayYesterday)
 
 # Usage
 
 No 1: Get the current time UTC (tarikhMasa)
 
+    ...
 	import static net.ticherhaz.tarikhmasa.TarikhMasa.GetTarikhMasa;
 	
 	textViewDate.setText(GetTarikhMasa());
@@ -72,6 +77,7 @@ Output:
 
 No 2: Convert from tarikhMasa to Local time
 
+    ...
 	import static net.ticherhaz.tarikhmasa.TarikhMasa.ConvertTarikhMasa2LocalTime;
 	
 	textViewDate.setText(ConvertTarikhMasa2LocalTime(GetTarikhMasa()));
@@ -92,6 +98,7 @@ No 3: Convert from tarikhMasa to Local time by Pattern (Customize yours!)
 
 Note: More pattern, can go here http://tutorials.jenkov.com/java-internationalization/simpledateformat.html
 
+    ...
 	import static net.ticherhaz.tarikhmasa.TarikhMasa.ConvertTarikhMasa2LocalTimePattern;
 	import static net.ticherhaz.tarikhmasa.TarikhMasa.GetTarikhMasa;
 	
@@ -103,6 +110,7 @@ Output:
 
 No 4: Get Time Ago (example, 3 minutes ago)
 
+    ...
 	import static net.ticherhaz.tarikhmasa.TarikhMasa.GetTarikhMasaTimeAgo;
 	
 	textViewDate.setText(GetTarikhMasaTimeAgo("2019-06-05T17:38:44.079Z", "EN", true));
@@ -132,9 +140,9 @@ How to get to that class?
 
 # Question?
 
-Email me: ticherhaz@gmail.com
+Email me at ticherhaz@gmail.com
 
-
+    ************************************************************************
 
     TarikhMasa
     https://github.com/ticherhaz/tarikhmasa
@@ -153,6 +161,10 @@ Email me: ticherhaz@gmail.com
 
     HOW TO USE? go here: https://github.com/ticherhaz/tarikhmasa
     Refer to README.md
+
+    ************************************************************************
+
+# License
 
     ************************************************************************
 
@@ -189,3 +201,5 @@ Email me: ticherhaz@gmail.com
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+    ************************************************************************
