@@ -1,4 +1,4 @@
-TarikhMasa 1.5.5
+TarikhMasa 1.5.7
 
 ANDROID STUDIO 3.4.2
 

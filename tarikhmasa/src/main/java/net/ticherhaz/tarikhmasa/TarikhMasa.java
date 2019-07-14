@@ -21,7 +21,7 @@ public class TarikhMasa {
     /*
     TarikhMasa
     https://github.com/ticherhaz/tarikhmasa
-    Copyright (C) 2015 Ticherhaz
+    Copyright (C) 2019 Ticherhaz
 
     Introduction: First of all, thanks to Jake Wharton (https://github.com/JakeWharton/ThreeTenABP) for the ThreeTenABP
     and thanks to Basil Bourque (https://github.com/basil-bourque) for the clean code.
