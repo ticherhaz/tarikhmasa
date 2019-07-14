@@ -59,7 +59,7 @@ public class TarikhMasa {
 
     TarikhMasa
     https://github.com/ticherhaz/tarikhmasa
-    Copyright (C) 2015 Ticherhaz
+    Copyright (C) 2019 Ticherhaz
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -85,16 +85,12 @@ public class TarikhMasa {
      * @since 4/6/2019 3:51AM GMT+8
      */
     private static DateTimeFormatter formatter = DateTimeFormatter
-
             /* You can change as ofPatter or ofLocalizedDateTime
-
             Example:
             .ofPattern("yyyy-MM-dd'T'HH:mm:ss")  //or
             .ofPattern("HH:mm:ssa dd/MM/yyyy")   //or
             .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT) //System type
-
              */
-
             .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)
             .withLocale(Locale.US);
 
@@ -164,6 +160,20 @@ public class TarikhMasa {
 
     /**
      * Explanation:
+     * This part where type long timestamp which you stored in database can be
+     * converted to TarikhMasa.
+     *
+     * @param timestamp any timestamp value you get from any resources
+     * @return conversion of timestamp as TarikhMasa (Instant)
+     * @since 14/7/2019 6:20PM GMT+8
+     */
+    public static String ConvertTimeStamp2TarikhMasa(final long timestamp) {
+        Instant instant = Instant.ofEpochMilli(timestamp);
+        return instant.toString();
+    }
+
+    /**
+     * Explanation:
      * This is where we want to convert to become 2 minutes ago.
      * The code is prepared with 3 parameters.
      * 1. language: comes with "EN" stands for English and "MY" stands for Malay
@@ -196,12 +206,18 @@ public class TarikhMasa {
          */
         Duration duration = Duration.between(instantBefore, instantNow);
 
+        /*
+         * 'day' is excluded from the duration because we want to make it more precise.
+         * Example: 12/7/2019 11:59PM - 13/7/2019, that's mean it is already 1 day (yesterday).
+         * duration does not calculate that. It still assume as 1 day.
+         *
+         * @modified 14/7/2019 6:20PM GMT+8
+         */
         //Variables
         String conversionTime = null;
         long second = duration.getSeconds();
         long minute = duration.toMinutes();
         long hour = duration.toHours();
-        long day = duration.toDays();
 
         /*
          * Explanation:
@@ -229,18 +245,28 @@ public class TarikhMasa {
          * (usage of DateUtils.getRelativeTimeSpanString) //This one is old.
          *
          * NEW: We are using back the day as we get from the Duration,
-         * and change it to become today and yesterday
+         * and change it to become today and yesterday.
+         *
+         * NEW2: Added day in here to get the precise value of day and
+         * removed the day from the duration.
          *
          * @since 5/6/2019 12:38PM GMT+8
          * @modified 6/6/2019 2:26PM GMT+8
+         * @modified2 14/7/2019 6:20PM GMT+8
          */
+
+        //Convert tarikhMasa become day only to subtract
+        final long beforeDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "dd"));
+        final long afterDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(instantNow.toString(), "dd"));
+        final long day = afterDay - beforeDay;
+
         if (language.equals("MY")) {
             if (day == 0) {
                 relativeToday = "Hari ini";
             } else if (day == 1) {
                 relativeToday = "Semalam";
             } else {
-                relativeToday = "";
+                relativeToday = "asd";
             }
         }
         if (language.equals("EN")) {
@@ -255,7 +281,6 @@ public class TarikhMasa {
         /*
          ***************** END ****************
          */
-
 
         //Convert tarikhMasa divided to time and date
         final String beforeTime = ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "h:mma");
@@ -291,8 +316,13 @@ public class TarikhMasa {
                 else
                     conversionTime = minute + " minutes ago";
             }
-            if (language.equals("MY"))
-                conversionTime = minute + " minit yang lalu";
+            if (language.equals("MY")) {
+                if (day == 1)
+                    conversionTime = relativeToday + ", " + minute + " minit yang lalu";
+                else
+                    conversionTime = minute + " minit yang lalu";
+
+            }
         }
         //Checking for hour
         else if (hour < 24) {
@@ -320,8 +350,6 @@ public class TarikhMasa {
                     else
                         conversionTime = day + " days ago, " + beforeTime + ", " + beforeDate;
                 }
-
-
             }
             if (language.equals("MY")) {
                 if (day == 0 || day == 1)

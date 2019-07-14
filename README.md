@@ -1,6 +1,12 @@
-TarikhMasa 1.5.4
+TarikhMasa 1.5.5
 
-ANDROID STUDIO
+ANDROID STUDIO 3.4.2
+
+Updated:
+(14/7/2019)
+1. Support AndroidX.
+2. Adding convert timestamp to TarikhMasa.
+3. Fix to get precise value of day for GetTarikhMasaTimeAgo method.
 
 Note: Support API15 and above.
 Tutorial Video: https://youtu.be/_Jr89NzGmig
@@ -24,7 +30,7 @@ Step 2. Add the dependency
 
 	dependencies {
 	    ...
-		implementation 'com.github.ticherhaz:tarikhmasa:1.5.4'
+		implementation 'com.github.ticherhaz:tarikhmasa:1.5.5'
 	}
 
 Step 3: Create new class "MyApplication.java"
@@ -37,7 +43,7 @@ Step 3: Create new class "MyApplication.java"
     	@Override
     	public void onCreate() {
         	super.onCreate();
-       	AndroidThreeTenBP(this);
+       	    AndroidThreeTenBP(this);
 		}
 	}
 
@@ -61,6 +67,7 @@ Step 4: Add android:name in AndroidManifest.xml
 	public static String ConvertTarikhMasa2LocalTime(final String tarikhMasa)
 	public static String ConvertTarikhMasa2LocalTimePattern(final String tarikhMasa, final String pattern)
 	public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow, final boolean onlyTodayYesterday)
+	public static String ConvertTimeStamp2TarikhMasa(final long timestamp)
 
 # Usage
 
@@ -146,7 +153,7 @@ Email me at ticherhaz@gmail.com
 
     TarikhMasa
     https://github.com/ticherhaz/tarikhmasa
-    Copyright (C) 2015 Ticherhaz
+    Copyright (C) 2019 Ticherhaz
 
     Introduction: First of all, thanks to Jake Wharton (https://github.com/JakeWharton/ThreeTenABP) for the ThreeTenABP
     and thanks to Basil Bourque (https://github.com/basil-bourque) for the clean code.
@@ -188,7 +195,7 @@ Email me at ticherhaz@gmail.com
 
     TarikhMasa
     https://github.com/ticherhaz/tarikhmasa
-    Copyright (C) 2015 Ticherhaz
+    Copyright (C) 2019 Ticherhaz
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
