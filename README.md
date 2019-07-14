@@ -134,6 +134,16 @@ Output:
 
 	Semalam, 1:38AM, 5 Jun
 
+No 4: Convert Timestamp to TarikhMasa
+
+    ...
+	import static net.ticherhaz.tarikhmasa.TarikhMasa.ConvertTimeStamp2TarikhMasa;
+	
+	textViewDate.setText(ConvertTimeStamp2TarikhMasa(Long.parseLong("1563089349272"));
+
+Output:
+
+	2019-07-14T11:43:44.079Z
 
 
 # More Information
