@@ -1,8 +1,11 @@
-TarikhMasa 1.5.7
+TarikhMasa 1.5.8
 
-ANDROID STUDIO 3.4.2
+ANDROID STUDIO 3.5
 
 Updated:
+(21/8/2019)
+1. Update to Android 3.5.
+
 (14/7/2019)
 1. Support AndroidX.
 2. Adding convert timestamp to TarikhMasa.
