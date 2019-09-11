@@ -211,7 +211,11 @@ public class TarikhMasa {
          * Example: 12/7/2019 11:59PM - 13/7/2019, that's mean it is already 1 day (yesterday).
          * duration does not calculate that. It still assume as 1 day.
          *
+         * NEW: We added back the `long day` because when we use the normal one (`afterDay - beforeDay`),
+         * we will get negative days. So to avoid that, we will use this one. and checked if day >=0
+         *
          * @modified 14/7/2019 6:20PM GMT+8
+         * @modified2 11/9/2019 4:24PM GMT+8
          */
         //Variables
         String conversionTime = null;
@@ -251,29 +255,33 @@ public class TarikhMasa {
          * NEW2: Added day in here to get the precise value of day and
          * removed the day from the duration.
          *
+         * NEW3: We need to use duration.toDays() because we also need the exact date and also we
+         * change the name `dayConverted` to check the date for yesterday and today.
+         *
          * @since 5/6/2019 12:38PM GMT+8
          * @modified 6/6/2019 2:26PM GMT+8
          * @modified2 14/7/2019 6:20PM GMT+8
+         * @modified3 11/9/2019 4:24PM GMT+8
          */
 
         //Convert tarikhMasa become day only to subtract
-        //final long beforeDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "dd"));
-        //final long afterDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(instantNow.toString(), "dd"));
-        //final long day = afterDay - beforeDay;
+        final long beforeDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "dd"));
+        final long afterDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(instantNow.toString(), "dd"));
+        final long dayConverted = afterDay - beforeDay;
 
         if (language.equals("MY")) {
-            if (day == 0) {
+            if (dayConverted == 0) {
                 relativeToday = "Hari ini";
-            } else if (day == 1) {
+            } else if (dayConverted == 1) {
                 relativeToday = "Semalam";
             } else {
                 relativeToday = "";
             }
         }
         if (language.equals("EN")) {
-            if (day == 0) {
+            if (dayConverted == 0) {
                 relativeToday = "Today";
-            } else if (day == 1) {
+            } else if (dayConverted == 1) {
                 relativeToday = "Yesterday";
             } else {
                 relativeToday = "";
@@ -337,8 +345,15 @@ public class TarikhMasa {
             if (language.equals("MY"))
                 conversionTime = relativeToday + ", " + hour + " jam yang lalu, " + beforeTime;
         }
+
+        /*
+         * NEW: We checked the day if >= 0 or not, to display
+         *
+         * @modified 11/9/2019 4.27PM GMT+8
+         */
+
         //Checking for day
-        else if (day < 7) {
+        else if (day < 7 && day >= 0) {
             //Checking for language chose
             if (language.equals("EN")) {
                 //Checking if the day is 0 (today) or 1 (yesterday), then display it
