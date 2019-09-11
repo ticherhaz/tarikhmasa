@@ -368,7 +368,7 @@ public class TarikhMasa {
                 }
             }
             if (language.equals("MY")) {
-                if (day == 0 || day == 1)
+                if ((day == 0 || day == 1) && dayConverted < 2)
                     conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
                 else {
                     //Checking if onlyTodayYesterday
