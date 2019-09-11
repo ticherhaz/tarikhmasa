@@ -218,6 +218,7 @@ public class TarikhMasa {
         long second = duration.getSeconds();
         long minute = duration.toMinutes();
         long hour = duration.toHours();
+        long day = duration.toDays();
 
         /*
          * Explanation:
@@ -256,9 +257,9 @@ public class TarikhMasa {
          */
 
         //Convert tarikhMasa become day only to subtract
-        final long beforeDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "dd"));
-        final long afterDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(instantNow.toString(), "dd"));
-        final long day = afterDay - beforeDay;
+        //final long beforeDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "dd"));
+        //final long afterDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(instantNow.toString(), "dd"));
+        //final long day = afterDay - beforeDay;
 
         if (language.equals("MY")) {
             if (day == 0) {
@@ -266,7 +267,7 @@ public class TarikhMasa {
             } else if (day == 1) {
                 relativeToday = "Semalam";
             } else {
-                relativeToday = "asd";
+                relativeToday = "";
             }
         }
         if (language.equals("EN")) {
