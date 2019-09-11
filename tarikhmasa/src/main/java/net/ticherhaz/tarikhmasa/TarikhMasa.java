@@ -215,15 +215,19 @@ public class TarikhMasa {
          * NEW: We added back the `long day` because when we use the normal one (`afterDay - beforeDay`),
          * we will get negative days. So to avoid that, we will use this one. and checked if day >=0
          *
+         * NEW2: We removed back the `day`, we proceed the old one and we just and 1 more condition at below code
+         * if `day >=0` to avoid negative day
+         *
          * @modified 14/7/2019 6:20PM GMT+8
          * @modified2 11/9/2019 4:24PM GMT+8
+         * @modified3 11/9/2019 9:40PM GMT+8
+         *
          */
         //Variables
         String conversionTime = null;
         long second = duration.getSeconds();
         long minute = duration.toMinutes();
         long hour = duration.toHours();
-        //long day = duration.toDays();
 
         /*
          * Explanation:
@@ -231,6 +235,7 @@ public class TarikhMasa {
          * First, need to convert from Instant to become Date and get the Millis.
          *
          * @since 5/6/2019 12:40PM GMT+8
+         *
          */
         Date dateBefore = DateTimeUtils.toDate(Instant.parse(tarikhMasa));
 
@@ -259,10 +264,15 @@ public class TarikhMasa {
          * NEW3: We need to use duration.toDays() because we also need the exact date and also we
          * change the name `dayConverted` to check the date for yesterday and today.
          *
+         * NEW4: We stick with the old plan, and we just add 1 condition at code below.
+         * to check `day >= 0`, to avoid negative day
+         *
          * @since 5/6/2019 12:38PM GMT+8
          * @modified 6/6/2019 2:26PM GMT+8
          * @modified2 14/7/2019 6:20PM GMT+8
          * @modified3 11/9/2019 4:24PM GMT+8
+         * @modified4 11/9/2019 9:41PM GMT+8
+         *
          */
 
         //Convert tarikhMasa become day only to subtract
@@ -348,9 +358,11 @@ public class TarikhMasa {
         }
 
         /*
-         * NEW: We checked the day if >= 0 or not, to display
+         * NEW: We checked the day if >= 0 or not, to display.
+         * if not, then we just proceed to next.
          *
          * @modified 11/9/2019 4.27PM GMT+8
+         *
          */
 
         //Checking for day

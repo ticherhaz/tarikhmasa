@@ -1,8 +1,11 @@
-TarikhMasa 1.5.8
+TarikhMasa 1.5.13
 
 ANDROID STUDIO 3.5
 
 Updated:
+(11/9/2019)
+1. Fixed the negative day and updates gradle.
+
 (21/8/2019)
 1. Update to Android 3.5.
 
