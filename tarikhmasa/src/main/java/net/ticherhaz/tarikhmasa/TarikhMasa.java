@@ -206,6 +206,7 @@ public class TarikhMasa {
          */
         Duration duration = Duration.between(instantBefore, instantNow);
 
+
         /*
          * 'day' is excluded from the duration because we want to make it more precise.
          * Example: 12/7/2019 11:59PM - 13/7/2019, that's mean it is already 1 day (yesterday).
@@ -222,7 +223,7 @@ public class TarikhMasa {
         long second = duration.getSeconds();
         long minute = duration.toMinutes();
         long hour = duration.toHours();
-        long day = duration.toDays();
+        //long day = duration.toDays();
 
         /*
          * Explanation:
@@ -267,21 +268,21 @@ public class TarikhMasa {
         //Convert tarikhMasa become day only to subtract
         final long beforeDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "dd"));
         final long afterDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(instantNow.toString(), "dd"));
-        final long dayConverted = afterDay - beforeDay;
+        final long day = afterDay - beforeDay;
 
         if (language.equals("MY")) {
-            if (dayConverted == 0) {
+            if (day == 0) {
                 relativeToday = "Hari ini";
-            } else if (dayConverted == 1) {
+            } else if (day == 1) {
                 relativeToday = "Semalam";
             } else {
                 relativeToday = "";
             }
         }
         if (language.equals("EN")) {
-            if (dayConverted == 0) {
+            if (day == 0) {
                 relativeToday = "Today";
-            } else if (dayConverted == 1) {
+            } else if (day == 1) {
                 relativeToday = "Yesterday";
             } else {
                 relativeToday = "";
@@ -368,7 +369,7 @@ public class TarikhMasa {
                 }
             }
             if (language.equals("MY")) {
-                if ((day == 0 || day == 1) && dayConverted < 2)
+                if (day == 0 || day == 1)
                     conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
                 else {
                     //Checking if onlyTodayYesterday
