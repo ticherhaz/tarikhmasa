@@ -1,6 +1,10 @@
-TarikhMasa 1.5.13
+TarikhMasa 1.5.14
 
 ANDROID STUDIO 3.5
+
+Updated:
+(3/10/2019)
+1. Added new method `ConvertCustomDate_ddMMyyyy_2TarikhMasa`
 
 Updated:
 (11/9/2019)
@@ -36,7 +40,7 @@ Step 2. Add the dependency
 
 	dependencies {
 	    ...
-		implementation 'com.github.ticherhaz:tarikhmasa:1.5.5'
+		implementation 'com.github.ticherhaz:tarikhmasa:1.5.14'
 	}
 
 Step 3: Create new class "MyApplication.java"
@@ -74,6 +78,7 @@ Step 4: Add android:name in AndroidManifest.xml
 	public static String ConvertTarikhMasa2LocalTimePattern(final String tarikhMasa, final String pattern)
 	public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow, final boolean onlyTodayYesterday)
 	public static String ConvertTimeStamp2TarikhMasa(final long timestamp)
+	public static String ConvertCustomDate_ddMMyyyy_2TarikhMasa(final String date)
 
 # Usage
 
@@ -150,6 +155,19 @@ No 4: Convert Timestamp to TarikhMasa
 Output:
 
 	2019-07-14T11:43:44.079Z
+
+No 4: Convert Custom Date (dd/MM/yyyy) to TarikhMasa
+
+    ...
+	import static net.ticherhaz.tarikhmasa.TarikhMasa.ConvertCustomDate_ddMMyyyy_2TarikhMasa;
+	
+	 String dateCustom = "31/12/2019";
+	 String tarikhMasaCustomDate = ConvertCustomDate_ddMMyyyy_2TarikhMasa(dateCustom);
+
+Output:
+
+	2019-12-31T00:00:00.000Z
+
 
 
 # More Information

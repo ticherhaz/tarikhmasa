@@ -8,7 +8,10 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 import org.threeten.bp.DateTimeUtils;
 import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
+import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.OffsetDateTime;
 import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZoneOffset;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.FormatStyle;
 
@@ -398,5 +401,25 @@ public class TarikhMasa {
             conversionTime = beforeTime + ", " + beforeDate;
 
         return conversionTime;
+    }
+
+
+    /**
+     * Explanation:
+     * This part is to convert from date especially from custom date for example,
+     * input from user is "31/12/2019": from there, we convert them to TarikhMasa which is UTC.
+     * <p>
+     * So the value go to parameter MUST position like this "dd/MM/yyyy" or else it will not working!
+     *
+     * @param date the value of date dd/MM/yyyy need include "/"!
+     * @return TarikhMasa string value to store in database
+     * @since 3/10/2019 4:53PM GMT+8
+     */
+    public static String ConvertCustomDate_ddMMyyyy_2TarikhMasa(final String date) {
+        String[] s = date.split("/");
+        String startPromotionFinal = s[2] + "-" + s[1] + "-" + s[0] + "T00:00:00";
+        LocalDateTime l = LocalDateTime.parse(startPromotionFinal);
+        OffsetDateTime o = l.atOffset(ZoneOffset.UTC);
+        return o.toInstant().toString();
     }
 }
