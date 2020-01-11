@@ -221,9 +221,13 @@ public class TarikhMasa {
          * NEW2: We removed back the `day`, we proceed the old one and we just and 1 more condition at below code
          * if `day >=0` to avoid negative day
          *
+         * NEW3: We added back the 'day', we need to fix, the day problems. Even after a few months already,
+         * it always detect yesterday
+         *
          * @modified 14/7/2019 6:20PM GMT+8
          * @modified2 11/9/2019 4:24PM GMT+8
          * @modified3 11/9/2019 9:40PM GMT+8
+         * @modified4 11/1/2020 9:29AM GMT+8
          *
          */
         //Variables
@@ -271,18 +275,20 @@ public class TarikhMasa {
          * NEW4: We stick with the old plan, and we just add 1 condition at code below.
          * to check `day >= 0`, to avoid negative day
          *
+         * NEW5: We removed this code (shown below).
+         *   //Convert tarikhMasa become day only to subtract
+         *   //final long beforeDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "dd"));
+         *   //final long afterDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(instantNow.toString(), "dd"));
+         *   //final long day = afterDay - beforeDay;
+         *
          * @since 5/6/2019 12:38PM GMT+8
          * @modified 6/6/2019 2:26PM GMT+8
          * @modified2 14/7/2019 6:20PM GMT+8
          * @modified3 11/9/2019 4:24PM GMT+8
          * @modified4 11/9/2019 9:41PM GMT+8
+         * @modified5 11/1/2020 9:30AM GMT+8
          *
          */
-
-        //Convert tarikhMasa become day only to subtract
-        //final long beforeDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "dd"));
-        //final long afterDay = Long.parseLong(ConvertTarikhMasa2LocalTimePattern(instantNow.toString(), "dd"));
-        // final long day = afterDay - beforeDay;
 
         if (language.equals("MY")) {
             if (day == 0) {
