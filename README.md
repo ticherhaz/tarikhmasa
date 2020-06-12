@@ -1,6 +1,10 @@
-TarikhMasa 1.5.14
+TarikhMasa 1.5.17
 
-ANDROID STUDIO 3.5
+ANDROID STUDIO 4.0
+
+Updated:
+(12/06/2020)
+1. Updated dependencies
 
 Updated:
 (3/10/2019)
