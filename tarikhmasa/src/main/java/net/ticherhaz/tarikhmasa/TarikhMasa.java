@@ -24,7 +24,7 @@ public class TarikhMasa {
     /*
     TarikhMasa
     https://github.com/ticherhaz/tarikhmasa
-    Copyright (C) 2020 Ticherhaz
+    Copyright (C) 2021 Ticherhaz
 
     Introduction: First of all, thanks to Jake Wharton (https://github.com/JakeWharton/ThreeTenABP) for the ThreeTenABP
     and thanks to Basil Bourque (https://github.com/basil-bourque) for the clean code.
@@ -62,7 +62,7 @@ public class TarikhMasa {
 
     TarikhMasa
     https://github.com/ticherhaz/tarikhmasa
-    Copyright (C) 2020 Ticherhaz
+    Copyright (C) 2021 Ticherhaz
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -87,7 +87,7 @@ public class TarikhMasa {
      *
      * @since 4/6/2019 3:51AM GMT+8
      */
-    private static DateTimeFormatter formatter = DateTimeFormatter
+    private static final DateTimeFormatter formatter = DateTimeFormatter
             /* You can change as ofPatter or ofLocalizedDateTime
             Example:
             .ofPattern("yyyy-MM-dd'T'HH:mm:ss")  //or
