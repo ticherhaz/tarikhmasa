@@ -1,6 +1,11 @@
-TarikhMasa 1.5.17
+TarikhMasa 1.5.21
 
-ANDROID STUDIO 4.0
+ANDROID STUDIO 4.1.3
+
+Updated:
+(03/04/2021)
+1. Moved to Kotlin
+1. Updated dependencies
 
 Updated:
 (12/06/2020)
