@@ -1,26 +1,15 @@
-package net.ticherhaz.tarikhmasa;
+package net.ticherhaz.tarikhmasa
 
-import android.app.Application;
-import android.text.format.DateUtils;
+import android.app.Application
+import android.text.format.DateUtils
+import com.jakewharton.threetenabp.AndroidThreeTen
+import org.threeten.bp.*
+import org.threeten.bp.format.DateTimeFormatter
+import org.threeten.bp.format.FormatStyle
+import java.util.*
+import java.util.concurrent.TimeUnit
 
-import com.jakewharton.threetenabp.AndroidThreeTen;
-
-import org.threeten.bp.DateTimeUtils;
-import org.threeten.bp.Duration;
-import org.threeten.bp.Instant;
-import org.threeten.bp.LocalDateTime;
-import org.threeten.bp.OffsetDateTime;
-import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZoneOffset;
-import org.threeten.bp.format.DateTimeFormatter;
-import org.threeten.bp.format.FormatStyle;
-
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
-public class TarikhMasa {
-
+object TarikhMasa {
     /*
     TarikhMasa
     https://github.com/ticherhaz/tarikhmasa
@@ -78,7 +67,6 @@ public class TarikhMasa {
 
      *Support min: API 15
      */
-
     /**
      * Explanation:
      * We use DateTimeFormatter instead SimpleDateFormat because it is
@@ -87,15 +75,14 @@ public class TarikhMasa {
      *
      * @since 4/6/2019 3:51AM GMT+8
      */
-    private static final DateTimeFormatter formatter = DateTimeFormatter
-            /* You can change as ofPatter or ofLocalizedDateTime
+    private val formatter = DateTimeFormatter /* You can change as ofPatter or ofLocalizedDateTime
             Example:
             .ofPattern("yyyy-MM-dd'T'HH:mm:ss")  //or
             .ofPattern("HH:mm:ssa dd/MM/yyyy")   //or
             .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT) //System type
              */
             .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)
-            .withLocale(Locale.US);
+            .withLocale(Locale.US)
 
     /**
      * ##              IMPORTANT                ##
@@ -111,8 +98,8 @@ public class TarikhMasa {
      * @param application will be send to the original library of AndroidThreeTenABP
      * @since 6/6/2019 10:31PM GMT+8
      */
-    public static void AndroidThreeTenBP(final Application application) {
-        AndroidThreeTen.init(application);
+    fun AndroidThreeTenBP(application: Application?) {
+        AndroidThreeTen.init(application)
     }
 
     /**
@@ -124,11 +111,11 @@ public class TarikhMasa {
      * @return localized date and time not customized
      * @since 6/6/2019 2:37PM GMT+8
      */
-    public static String ConvertTarikhMasa2LocalTime(final String tarikhMasa) {
+    fun ConvertTarikhMasa2LocalTime(tarikhMasa: String?): String {
         //We get the value from the database (date) which is from Instant
         return Instant.parse(tarikhMasa)
                 .atZone(ZoneId.systemDefault())
-                .format(formatter);
+                .format(formatter)
     }
 
     /**
@@ -141,11 +128,11 @@ public class TarikhMasa {
      * @return localized date and time that has been customized
      * @since 6/6/2019 2:36PM GMT+8
      */
-    public static String ConvertTarikhMasa2LocalTimePattern(final String tarikhMasa, final String pattern) {
+    fun ConvertTarikhMasa2LocalTimePattern(tarikhMasa: String?, pattern: String?): String {
         //We get the value from the database (date) which is from Instant
         return Instant.parse(tarikhMasa)
                 .atZone(ZoneId.systemDefault())
-                .format(DateTimeFormatter.ofPattern(pattern).withLocale(Locale.US));
+                .format(DateTimeFormatter.ofPattern(pattern).withLocale(Locale.US))
     }
 
     /**
@@ -155,10 +142,10 @@ public class TarikhMasa {
      *
      * @return current Date Time and Timezone
      * @since 4/6/2019 3:00AM GMT+8
-     **/
-    public static String GetTarikhMasa() {
-        Instant instant = Instant.now();
-        return instant.toString();
+     */
+    fun GetTarikhMasa(): String {
+        val instant = Instant.now()
+        return instant.toString()
     }
 
     /**
@@ -170,9 +157,9 @@ public class TarikhMasa {
      * @return conversion of timestamp as TarikhMasa (Instant)
      * @since 14/7/2019 6:20PM GMT+8
      */
-    public static String ConvertTimeStamp2TarikhMasa(final long timestamp) {
-        Instant instant = Instant.ofEpochMilli(timestamp);
-        return instant.toString();
+    fun ConvertTimeStamp2TarikhMasa(timestamp: Long): String {
+        val instant = Instant.ofEpochMilli(timestamp)
+        return instant.toString()
     }
 
     /**
@@ -190,11 +177,11 @@ public class TarikhMasa {
      * @return conversion of time ago
      * @since 5/6/2019 10:01PM GMT+8
      */
-    public static String GetTarikhMasaTimeAgo(final String tarikhMasa, final String language, final boolean isJustNow, final boolean onlyTodayYesterday) {
+    fun GetTarikhMasaTimeAgo(tarikhMasa: String?, language: String, isJustNow: Boolean, onlyTodayYesterday: Boolean): String? {
 
         //Get Instant for tarikhMasa (before) and right now.
-        Instant instantNow = Instant.now();
-        Instant instantBefore = Instant.parse(tarikhMasa);
+        val instantNow = Instant.now()
+        val instantBefore = Instant.parse(tarikhMasa)
 
         /*
          * Explanation:
@@ -207,7 +194,7 @@ public class TarikhMasa {
          * @since 5/6/2019 11:21PM GMT+8
          *
          */
-        Duration duration = Duration.between(instantBefore, instantNow);
+        val duration = Duration.between(instantBefore, instantNow)
 
 
         /*
@@ -231,11 +218,11 @@ public class TarikhMasa {
          *
          */
         //Variables
-        String conversionTime = null;
-        long second = duration.getSeconds();
-        long minute = duration.toMinutes();
-        long hour = duration.toHours();
-        long day = duration.toDays();
+        var conversionTime: String? = null
+        val second = duration.seconds
+        val minute = duration.toMinutes()
+        val hour = duration.toHours()
+        val day = duration.toDays()
 
         /*
          * Explanation:
@@ -245,15 +232,13 @@ public class TarikhMasa {
          * @since 5/6/2019 12:40PM GMT+8
          *
          */
-        Date dateBefore = DateTimeUtils.toDate(Instant.parse(tarikhMasa));
-
-        long dateMillis = TimeUnit.MILLISECONDS.toMillis(dateBefore.getTime());
-        CharSequence relativeToday = DateUtils.getRelativeTimeSpanString
-                (
-                        dateMillis,
-                        System.currentTimeMillis(),
-                        DateUtils.DAY_IN_MILLIS
-                );
+        val dateBefore = DateTimeUtils.toDate(Instant.parse(tarikhMasa))
+        val dateMillis = TimeUnit.MILLISECONDS.toMillis(dateBefore.time)
+        var relativeToday = DateUtils.getRelativeTimeSpanString(
+                dateMillis,
+                System.currentTimeMillis(),
+                DateUtils.DAY_IN_MILLIS
+        )
         /*
          * ***************** END ****************
          */
@@ -288,24 +273,30 @@ public class TarikhMasa {
          * @modified4 11/9/2019 9:41PM GMT+8
          * @modified5 11/1/2020 9:30AM GMT+8
          *
-         */
-
-        if (language.equals("MY")) {
-            if (day == 0) {
-                relativeToday = "Hari ini";
-            } else if (day == 1) {
-                relativeToday = "Semalam";
-            } else {
-                relativeToday = "";
+         */if (language == "MY") {
+            relativeToday = when (day) {
+                0L -> {
+                    "Hari ini"
+                }
+                1L -> {
+                    "Semalam"
+                }
+                else -> {
+                    ""
+                }
             }
         }
-        if (language.equals("EN")) {
-            if (day == 0) {
-                relativeToday = "Today";
-            } else if (day == 1) {
-                relativeToday = "Yesterday";
-            } else {
-                relativeToday = "";
+        if (language == "EN") {
+            relativeToday = when (day) {
+                0L -> {
+                    "Today"
+                }
+                1L -> {
+                    "Yesterday"
+                }
+                else -> {
+                    ""
+                }
             }
         }
         /*
@@ -313,120 +304,73 @@ public class TarikhMasa {
          */
 
         //Convert tarikhMasa divided to time and date
-        final String beforeTime = ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "h:mma");
-        final String beforeDate = ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "d MMM");
+        val beforeTime = ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "h:mma")
+        val beforeDate = ConvertTarikhMasa2LocalTimePattern(tarikhMasa, "d MMM")
 
         //Checking for second
         if (second < 60) {
             //Usage of just now
             if (isJustNow) {
                 //Checking for language chose
-                if (language.equals("EN"))
-                    conversionTime = "Just now";
-                if (language.equals("MY"))
-                    conversionTime = "Sebentar tadi";
+                if (language == "EN") conversionTime = "Just now"
+                if (language == "MY") conversionTime = "Sebentar tadi"
             } else {
                 //Checking for language chose
-                if (language.equals("EN")) {
-                    if (second == 0 || second == 1)
-                        conversionTime = second + " second ago";
-                    else
-                        conversionTime = second + " seconds ago";
+                if (language == "EN") {
+                    conversionTime = if (second == 0L || second == 1L) "$second second ago" else "$second seconds ago"
                 }
-                if (language.equals("MY"))
-                    conversionTime = second + " saat yang lalu";
+                if (language == "MY") conversionTime = "$second saat yang lalu"
             }
-        }
-        //Checking for minute
-        else if (minute < 60) {
+        } else if (minute < 60) {
             //Checking for language chose
-            if (language.equals("EN")) {
-                if (minute == 1)
-                    conversionTime = minute + " minute ago";
-                else
-                    conversionTime = minute + " minutes ago";
+            if (language == "EN") {
+                conversionTime = if (minute == 1L) "$minute minute ago" else "$minute minutes ago"
             }
-            if (language.equals("MY")) {
-                if (day == 1)
-                    conversionTime = relativeToday + ", " + minute + " minit yang lalu";
-                else
-                    conversionTime = minute + " minit yang lalu";
-
+            if (language == "MY") {
+                conversionTime = if (day == 1L) "$relativeToday, $minute minit yang lalu" else "$minute minit yang lalu"
             }
-        }
-        //Checking for hour
-        else if (hour < 24) {
+        } else if (hour < 24) {
             //Checking for language chose
-            if (language.equals("EN")) {
-                if (hour == 1)
-                    conversionTime = relativeToday + ", " + hour + " hour ago, " + beforeTime;
-                else
-                    conversionTime = relativeToday + ", " + hour + " hours ago, " + beforeTime;
+            if (language == "EN") {
+                conversionTime = if (hour == 1L) "$relativeToday, $hour hour ago, $beforeTime" else "$relativeToday, $hour hours ago, $beforeTime"
             }
-            if (language.equals("MY"))
-                conversionTime = relativeToday + ", " + hour + " jam yang lalu, " + beforeTime;
-        }
-
-        /*
-         * NEW: We checked the day if >= 0 or not, to display.
-         * if not, then we just proceed to next.
-         *
-         * @modified 11/9/2019 4.27PM GMT+8
-         *
-         */
-
-        //Checking for day
-        else if (day < 7 && day >= 0) {
+            if (language == "MY") conversionTime = "$relativeToday, $hour jam yang lalu, $beforeTime"
+        } else if (day in 0..6) {
             //Checking for language chose
-            if (language.equals("EN")) {
+            if (language == "EN") {
                 //Checking if the day is 0 (today) or 1 (yesterday), then display it
-                if (day == 0 || day == 1)
-                    conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
-                else {
+                conversionTime = if (day == 0L || day == 1L) "$relativeToday, $beforeTime, $beforeDate" else {
                     //Checking if onlyTodayYesterday
-                    if (onlyTodayYesterday)
-                        conversionTime = beforeTime + ", " + beforeDate;
-                    else
-                        conversionTime = day + " days ago, " + beforeTime + ", " + beforeDate;
+                    if (onlyTodayYesterday) "$beforeTime, $beforeDate" else "$day days ago, $beforeTime, $beforeDate"
                 }
             }
-            if (language.equals("MY")) {
-                if (day == 0 || day == 1)
-                    conversionTime = relativeToday + ", " + beforeTime + ", " + beforeDate;
-                else {
+            if (language == "MY") {
+                conversionTime = if (day == 0L || day == 1L) "$relativeToday, $beforeTime, $beforeDate" else {
                     //Checking if onlyTodayYesterday
-                    if (onlyTodayYesterday)
-                        conversionTime = beforeTime + ", " + beforeDate;
-                    else
-                        conversionTime = day + " hari yang lalu, " + beforeTime + ", " + beforeDate;
+                    if (onlyTodayYesterday) "$beforeTime, $beforeDate" else "$day hari yang lalu, $beforeTime, $beforeDate"
                 }
-
             }
-        }
-        //When the day above 7 days, it will display only time and date
-        else
-            conversionTime = beforeTime + ", " + beforeDate;
-
-        return conversionTime;
+        } else conversionTime = "$beforeTime, $beforeDate"
+        return conversionTime
     }
-
 
     /**
      * Explanation:
      * This part is to convert from date especially from custom date for example,
      * input from user is "31/12/2019": from there, we convert them to TarikhMasa which is UTC.
-     * <p>
+     *
+     *
      * So the value go to parameter MUST position like this "dd/MM/yyyy" or else it will not working!
      *
      * @param date the value of date dd/MM/yyyy need include "/"!
      * @return TarikhMasa string value to store in database
      * @since 3/10/2019 4:53PM GMT+8
      */
-    public static String ConvertCustomDate_ddMMyyyy_2TarikhMasa(final String date) {
-        String[] s = date.split("/");
-        String startPromotionFinal = s[2] + "-" + s[1] + "-" + s[0] + "T00:00:00";
-        LocalDateTime l = LocalDateTime.parse(startPromotionFinal);
-        OffsetDateTime o = l.atOffset(ZoneOffset.UTC);
-        return o.toInstant().toString();
+    fun ConvertCustomDate_ddMMyyyy_2TarikhMasa(date: String): String {
+        val s = date.split("/").toTypedArray()
+        val startPromotionFinal = s[2] + "-" + s[1] + "-" + s[0] + "T00:00:00"
+        val l = LocalDateTime.parse(startPromotionFinal)
+        val o = l.atOffset(ZoneOffset.UTC)
+        return o.toInstant().toString()
     }
 }

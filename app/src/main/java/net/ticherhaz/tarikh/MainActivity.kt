@@ -1,13 +1,5 @@
-package net.ticherhaz.tarikh;
+package net.ticherhaz.tarikh
 
-import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity
 
-import androidx.appcompat.app.AppCompatActivity;
-
-public class MainActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-}
+class MainActivity : AppCompatActivity()
