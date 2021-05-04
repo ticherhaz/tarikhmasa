@@ -1,6 +1,10 @@
-TarikhMasa 1.5.21
+TarikhMasa 1.5.22
 
 ANDROID STUDIO 4.1.3
+
+Updated:
+(04/05/2021)
+1. Updated dependencies
 
 Updated:
 (03/04/2021)
