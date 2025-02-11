@@ -1,6 +1,12 @@
-TarikhMasa 1.5.22
+TarikhMasa 2.0
 
-ANDROID STUDIO 4.1.3
+ANDROID STUDIO LADYBUG
+
+Updated:
+(11/02/2025)
+1. Updated dependencies
+2. Using Java 21
+3. Min SDK 21
 
 Updated:
 (04/05/2021)
