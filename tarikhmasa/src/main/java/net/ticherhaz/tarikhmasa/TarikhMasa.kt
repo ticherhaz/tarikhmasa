@@ -3,10 +3,15 @@ package net.ticherhaz.tarikhmasa
 import android.app.Application
 import android.text.format.DateUtils
 import com.jakewharton.threetenabp.AndroidThreeTen
-import org.threeten.bp.*
+import org.threeten.bp.DateTimeUtils
+import org.threeten.bp.Duration
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZoneOffset
 import org.threeten.bp.format.DateTimeFormatter
 import org.threeten.bp.format.FormatStyle
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 object TarikhMasa {
@@ -81,8 +86,8 @@ object TarikhMasa {
             .ofPattern("HH:mm:ssa dd/MM/yyyy")   //or
             .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT) //System type
              */
-            .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)
-            .withLocale(Locale.US)
+        .ofLocalizedDateTime(FormatStyle.LONG, FormatStyle.SHORT)
+        .withLocale(Locale.US)
 
     /**
      * ##              IMPORTANT                ##
@@ -114,8 +119,8 @@ object TarikhMasa {
     fun ConvertTarikhMasa2LocalTime(tarikhMasa: String?): String {
         //We get the value from the database (date) which is from Instant
         return Instant.parse(tarikhMasa)
-                .atZone(ZoneId.systemDefault())
-                .format(formatter)
+            .atZone(ZoneId.systemDefault())
+            .format(formatter)
     }
 
     /**
@@ -131,8 +136,8 @@ object TarikhMasa {
     fun ConvertTarikhMasa2LocalTimePattern(tarikhMasa: String?, pattern: String?): String {
         //We get the value from the database (date) which is from Instant
         return Instant.parse(tarikhMasa)
-                .atZone(ZoneId.systemDefault())
-                .format(DateTimeFormatter.ofPattern(pattern).withLocale(Locale.US))
+            .atZone(ZoneId.systemDefault())
+            .format(DateTimeFormatter.ofPattern(pattern).withLocale(Locale.US))
     }
 
     /**
@@ -177,7 +182,12 @@ object TarikhMasa {
      * @return conversion of time ago
      * @since 5/6/2019 10:01PM GMT+8
      */
-    fun GetTarikhMasaTimeAgo(tarikhMasa: String?, language: String, isJustNow: Boolean, onlyTodayYesterday: Boolean): String? {
+    fun GetTarikhMasaTimeAgo(
+        tarikhMasa: String?,
+        language: String,
+        isJustNow: Boolean,
+        onlyTodayYesterday: Boolean
+    ): String? {
 
         //Get Instant for tarikhMasa (before) and right now.
         val instantNow = Instant.now()
@@ -235,9 +245,9 @@ object TarikhMasa {
         val dateBefore = DateTimeUtils.toDate(Instant.parse(tarikhMasa))
         val dateMillis = TimeUnit.MILLISECONDS.toMillis(dateBefore.time)
         var relativeToday = DateUtils.getRelativeTimeSpanString(
-                dateMillis,
-                System.currentTimeMillis(),
-                DateUtils.DAY_IN_MILLIS
+            dateMillis,
+            System.currentTimeMillis(),
+            DateUtils.DAY_IN_MILLIS
         )
         /*
          * ***************** END ****************
@@ -278,9 +288,11 @@ object TarikhMasa {
                 0L -> {
                     "Hari ini"
                 }
+
                 1L -> {
                     "Semalam"
                 }
+
                 else -> {
                     ""
                 }
@@ -291,9 +303,11 @@ object TarikhMasa {
                 0L -> {
                     "Today"
                 }
+
                 1L -> {
                     "Yesterday"
                 }
+
                 else -> {
                     ""
                 }
@@ -317,7 +331,8 @@ object TarikhMasa {
             } else {
                 //Checking for language chose
                 if (language == "EN") {
-                    conversionTime = if (second == 0L || second == 1L) "$second second ago" else "$second seconds ago"
+                    conversionTime =
+                        if (second == 0L || second == 1L) "$second second ago" else "$second seconds ago"
                 }
                 if (language == "MY") conversionTime = "$second saat yang lalu"
             }
@@ -327,28 +342,33 @@ object TarikhMasa {
                 conversionTime = if (minute == 1L) "$minute minute ago" else "$minute minutes ago"
             }
             if (language == "MY") {
-                conversionTime = if (day == 1L) "$relativeToday, $minute minit yang lalu" else "$minute minit yang lalu"
+                conversionTime =
+                    if (day == 1L) "$relativeToday, $minute minit yang lalu" else "$minute minit yang lalu"
             }
         } else if (hour < 24) {
             //Checking for language chose
             if (language == "EN") {
-                conversionTime = if (hour == 1L) "$relativeToday, $hour hour ago, $beforeTime" else "$relativeToday, $hour hours ago, $beforeTime"
+                conversionTime =
+                    if (hour == 1L) "$relativeToday, $hour hour ago, $beforeTime" else "$relativeToday, $hour hours ago, $beforeTime"
             }
-            if (language == "MY") conversionTime = "$relativeToday, $hour jam yang lalu, $beforeTime"
+            if (language == "MY") conversionTime =
+                "$relativeToday, $hour jam yang lalu, $beforeTime"
         } else if (day in 0..6) {
             //Checking for language chose
             if (language == "EN") {
                 //Checking if the day is 0 (today) or 1 (yesterday), then display it
-                conversionTime = if (day == 0L || day == 1L) "$relativeToday, $beforeTime, $beforeDate" else {
-                    //Checking if onlyTodayYesterday
-                    if (onlyTodayYesterday) "$beforeTime, $beforeDate" else "$day days ago, $beforeTime, $beforeDate"
-                }
+                conversionTime =
+                    if (day == 0L || day == 1L) "$relativeToday, $beforeTime, $beforeDate" else {
+                        //Checking if onlyTodayYesterday
+                        if (onlyTodayYesterday) "$beforeTime, $beforeDate" else "$day days ago, $beforeTime, $beforeDate"
+                    }
             }
             if (language == "MY") {
-                conversionTime = if (day == 0L || day == 1L) "$relativeToday, $beforeTime, $beforeDate" else {
-                    //Checking if onlyTodayYesterday
-                    if (onlyTodayYesterday) "$beforeTime, $beforeDate" else "$day hari yang lalu, $beforeTime, $beforeDate"
-                }
+                conversionTime =
+                    if (day == 0L || day == 1L) "$relativeToday, $beforeTime, $beforeDate" else {
+                        //Checking if onlyTodayYesterday
+                        if (onlyTodayYesterday) "$beforeTime, $beforeDate" else "$day hari yang lalu, $beforeTime, $beforeDate"
+                    }
             }
         } else conversionTime = "$beforeTime, $beforeDate"
         return conversionTime

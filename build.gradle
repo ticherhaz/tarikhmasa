@@ -1,11 +1,11 @@
 buildscript {
     ext {
-        agp_version = '8.8.0'
+        agp_version = '8.13.1'
+        kotlin_version = '2.2.21'
     }
-    ext.kotlin_version = '2.1.0'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$agp_version"
@@ -15,7 +15,7 @@ buildscript {
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 tasks.register('clean', Delete) {
