@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'maven-publish'
 
 android {
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         namespace "net.ticherhaz.tarikh"
         minSdkVersion 24
-        targetSdkVersion 36
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -21,12 +21,36 @@ android {
     kotlinOptions {
         jvmTarget = "21"
     }
+    lint {
+        targetSdk 36
+    }
+    testOptions {
+        targetSdk 36
+    }
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.ticherhaz'
+                artifactId = 'tarikhmasa'
+                version = '3.1.0'
+            }
+        }
+    }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.jakewharton.threetenabp:threetenabp:1.4.9'
-    implementation "androidx.core:core-ktx:1.17.0"
+    implementation "androidx.core:core-ktx:1.19.1"
 }
 repositories {
     mavenCentral()

@@ -1,6 +1,11 @@
-TarikhMasa 2.0
+TarikhMasa 3.1.0
 
-ANDROID STUDIO LADYBUG
+ANDROID STUDIO
+
+Updated:
+1. Updated dependencies (compileSdk 37, AGP 9.5.1, Gradle 9.8.2)
+2. Updated targetSdkVersion 37
+3. Added Maven publishing configuration for JitPack
 
 Updated:
 (11/02/2025)
@@ -59,7 +64,7 @@ Step 2. Add the dependency
 
 	dependencies {
 	    ...
-		implementation 'com.github.ticherhaz:tarikhmasa:1.5.14'
+		implementation 'com.github.ticherhaz:tarikhmasa:3.1.0'
 	}
 
 Step 3: Create new class "MyApplication.java"

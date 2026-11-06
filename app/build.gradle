@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         namespace "net.ticherhaz.tarikh"
         applicationId "net.ticherhaz.tarikh"
         minSdkVersion 24
-        targetSdkVersion 36
-        versionCode 30
-        versionName "3.0"
+        targetSdkVersion 37
+        versionCode 31
+        versionName "3.1"
     }
     buildTypes {
         release {
@@ -27,7 +27,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.7.1'
+    implementation 'androidx.appcompat:appcompat:1.8.0'
     implementation project(path: ':tarikhmasa')
 }
 repositories {
